@@ -76,7 +76,7 @@ def verify_file(file_path, signature_path, pubkey):
         print("signature is invalid for %s" % file_path)
 
 
-# main2 to encrypt, decrypt and sign a folder of files
+# main to encrypt, decrypt and sign a folder of files
 def main():
     ################## User input ##################
     print('################## User input ##################')
