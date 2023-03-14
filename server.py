@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, abort
 from utils import validateValues
 
 app = Flask(__name__)
@@ -32,6 +32,10 @@ def generate_certificate():
     city = request.form['city']
     print(common_name, organization, country, state, city)
 
+    # validate values and return error if invalid
+    if not validateValues([common_name, organization, country, state, city]):
+        return abort(400, 'Enetered values are invalid')
+    
     # TODO: generate certificate
 
     return redirect(url_for('index'))
