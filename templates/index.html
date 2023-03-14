@@ -30,6 +30,8 @@
       <form
         class="w-10/12 flex flex-col justify-center mx-auto px-12 pt-10 pb-7 border-4 border-gray-300 border-dashed rounded-lg"
         id="csr-form"
+        action="http://localhost:5000/generate-certificate"
+        method="post"
       >
         <div class="w-full flex items-center mb-7">
           <label for="cn" class="w-32 font-semibold">CN: </label>
@@ -180,13 +182,13 @@
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
+          body: {
             cn: cn.value,
             organization: organization.value,
             city: city.value,
             state: state.value,
             country: country.value,
-          }),
+          },
         })
           .then((res) => res.json())
           .then((data) => {
@@ -210,30 +212,6 @@
 
       // error message
       const errorMsg = document.getElementById("error-msg");
-
-      // form validation
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        // validate form fields
-        const isValid = validateCertificateFields(
-          cn.value,
-          organization.value,
-          city.value,
-          state.value,
-          country.value
-        );
-
-        if (isValid === true) {
-          // submit form and make a post request to server : localhost:5000/generate-certificate
-          console.log("submit form");
-          generateCertificate();
-        } else {
-          // show error message
-          errorMsg.classList.remove("hidden");
-          errorMsg.textContent = isValid.message;
-        }
-      });
     </script>
   </body>
 </html>

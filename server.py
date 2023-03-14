@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from utils import validateValues
 
 app = Flask(__name__)
 
@@ -15,7 +16,7 @@ def generate_csr():
 
 
 # /generate-certificate : POST
-# params: 
+# params:
 #   Common Name: string
 #   Organization: string
 #   Country: string (two letter code)
@@ -24,7 +25,7 @@ def generate_csr():
 
 @app.route('/generate-certificate', methods=['POST'])
 def generate_certificate():
-    common_name = request.form['common_name']
+    common_name = request.form['cn']
     organization = request.form['organization']
     country = request.form['country']
     state = request.form['state']
