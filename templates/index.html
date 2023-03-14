@@ -174,6 +174,29 @@
         return true;
       }
 
+      async function generateCertificate() {
+        await fetch("http://localhost:5000/generate-certificate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cn: cn.value,
+            organization: organization.value,
+            city: city.value,
+            state: state.value,
+            country: country.value,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
       // form
       const form = document.getElementById("csr-form");
       const submitBtn = document.getElementById("submit-btn");
@@ -202,8 +225,9 @@
         );
 
         if (isValid === true) {
-          // submit form
+          // submit form and make a post request to server : localhost:5000/generate-certificate
           console.log("submit form");
+          generateCertificate();
         } else {
           // show error message
           errorMsg.classList.remove("hidden");

@@ -29,6 +29,7 @@ def generate_certificate():
     country = request.form['country']
     state = request.form['state']
     city = request.form['city']
+    print(common_name, organization, country, state, city)
 
     # TODO: generate certificate
 
