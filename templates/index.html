@@ -1,15 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CA Authority Server</title>
-</head>
+  <body>
+    <!-- create a page with title: certificate generation and a form that contains :
+        CN, Organization, City, State and Country -->
 
-<body>
-    <h1>Crypto Project</h1>
-</body>
+    <div class="bg-gray-100 rounded-lg h-screen p-12 pt-8">
+      <!-- Title -->
+      <div class="flex justify-center">
+        <h1 class="text-3xl font-bold mb-10">Certificate Generation</h1>
+      </div>
 
+      <!-- Error msg -->
+      <p
+        class="w-10/12 h-12 flex items-center justify-center bg-red-300 border border-red-500 rounded-lg mx-auto text-center text-red-600 font-semibold mb-5 hidden"
+        id="error-msg"
+      >
+        error
+      </p>
+
+      <!-- Form -->
+      <form
+        class="w-10/12 flex flex-col justify-center mx-auto px-12 pt-10 pb-7 border-4 border-gray-300 border-dashed rounded-lg"
+        id="csr-form"
+      >
+        <div class="w-full flex items-center mb-7">
+          <label for="cn" class="w-32 font-semibold">CN: </label>
+          <input
+            type="text "
+            name="cn"
+            id="cn"
+            class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
+            placeholder="Common Name"
+          />
+        </div>
+        <div class="w-full flex items-center mb-7">
+          <label for="organization" class="w-32 font-semibold"
+            >Organization:
+          </label>
+          <input
+            type="text "
+            name="organization"
+            id="organization"
+            class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
+            placeholder="Organization"
+          />
+        </div>
+        <div class="w-full flex items-center mb-7">
+          <label for="city" class="w-32 font-semibold">City: </label>
+          <input
+            type="text "
+            name="city"
+            id="city"
+            class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
+            placeholder="City"
+          />
+        </div>
+        <div class="w-full flex items-center mb-7">
+          <label for="state" class="w-32 font-semibold">State: </label>
+          <input
+            type="text "
+            name="state"
+            id="state"
+            class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
+            placeholder="State"
+          />
+        </div>
+        <div class="w-full flex items-center mb-7">
+          <label for="country" class="w-32 font-semibold">Country: </label>
+          <input
+            type="text "
+            name="country"
+            id="country"
+            class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
+            placeholder="Country"
+          />
+        </div>
+        <div class="w-full flex items-center mx-auto">
+          <button
+            type="reset"
+            class="h-12 w-48 m-auto rounded-lg text-center bg-red-300"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            id="submit-btn"
+            class="h-12 w-48 m-auto rounded-lg text-center bg-gray-300 font-medium"
+          >
+            Generate Certifiate
+          </button>
+        </div>
+      </form>
+    </div>
+    <script src="https://unpkg.com/validator@latest/validator.min.js"></script>
+    <script>
+      console.log("hello world");
+
+      function validateCertificateFields(
+        cn,
+        organization,
+        city,
+        state,
+        country
+      ) {
+        // check cn field
+        if (
+          validator.isEmpty(cn) ||
+          !validator.isLength(cn, { min: 3, max: 64 }) ||
+          !validator.isAlphanumeric(cn)
+        ) {
+          return {
+            isValid: false,
+            message: "Invalid Common Name",
+          };
+        }
+
+        // check organization field
+        if (
+          validator.isEmpty(organization) ||
+          !validator.isLength(organization, { min: 3, max: 64 }) ||
+          !validator.isAlphanumeric(organization)
+        ) {
+          return {
+            isValid: false,
+            message: "Invalid Organization",
+          };
+        }
+
+        // check city field
+        if (
+          validator.isEmpty(city) ||
+          !validator.isLength(city, { min: 3, max: 64 }) ||
+          !validator.isAlphanumeric(city)
+        ) {
+          return {
+            isValid: false,
+            message: "Invalid City",
+          };
+        }
+
+        // check state field
+        if (
+          validator.isEmpty(state) ||
+          !validator.isLength(state, { min: 3, max: 64 }) ||
+          !validator.isAlphanumeric(state)
+        ) {
+          return {
+            isValid: false,
+            message: "Invalid State",
+          };
+        }
+
+        // check country field
+        if (
+          validator.isEmpty(country) ||
+          !validator.isLength(country, { min: 3, max: 64 }) ||
+          !validator.isAlphanumeric(country)
+        ) {
+          return {
+            isValid: false,
+            message: "Invalid Country",
+          };
+        }
+
+        return true;
+      }
+
+      // form
+      const form = document.getElementById("csr-form");
+      const submitBtn = document.getElementById("submit-btn");
+
+      // form fields
+      const cn = document.getElementById("cn");
+      const organization = document.getElementById("organization");
+      const city = document.getElementById("city");
+      const state = document.getElementById("state");
+      const country = document.getElementById("country");
+
+      // error message
+      const errorMsg = document.getElementById("error-msg");
+
+      // form validation
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // validate form fields
+        const isValid = validateCertificateFields(
+          cn.value,
+          organization.value,
+          city.value,
+          state.value,
+          country.value
+        );
+
+        if (isValid === true) {
+          // submit form
+          console.log("submit form");
+        } else {
+          // show error message
+          errorMsg.classList.remove("hidden");
+          errorMsg.textContent = isValid.message;
+        }
+      });
+    </script>
+  </body>
 </html>
