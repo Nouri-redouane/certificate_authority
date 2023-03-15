@@ -23,7 +23,7 @@ from cryptography.x509.oid import NameOID
 import datetime
 
 
-def generate_certificate():
+def generate_certificate(name, common_name):
     # Generate a public/private key pair for the CA
     private_key = rsa.generate_private_key(
         public_exponent=65537,
@@ -80,7 +80,7 @@ def generate_certificate():
 
     # Create a Certificate Signing Request (CSR) for the entity
     subject = x509.Name([
-        x509.NameAttribute(NameOID.COMMON_NAME, u'MyEntity'),
+        x509.NameAttribute(NameOID.COMMON_NAME, name),
     
     ])
     csr = x509.CertificateSigningRequestBuilder().subject_name(
@@ -104,7 +104,7 @@ def generate_certificate():
         # Set the expiration time of the entity's certificate here
         datetime.datetime.utcnow() + datetime.timedelta(days=365)
     ).add_extension(
-        x509.SubjectAlternativeName([x509.DNSName(u"localhost")]),
+        x509.SubjectAlternativeName([x509.DNSName(common_name)]),
         critical=False,
     ).sign(private_key, hashes.SHA256())
 
