@@ -120,4 +120,3 @@ def generate_certificate():
             encoding=serialization.Encoding.PEM,
         ))
 
-generate_certificate()
