@@ -33,7 +33,7 @@ def generate_certificate(name, common_name, country, state, locality):
 
     # Create a self-signed certificate for the CA using the private key
     subject = issuer = x509.Name([
-        x509.NameAttribute(NameOID.COMMON_NAME, u'USTHB certeficat authority'),
+        x509.NameAttribute(NameOID.COMMON_NAME, u'USTHB certificate authority'),
         
     ])
     issuer_cert = x509.CertificateBuilder().subject_name(
