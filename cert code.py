@@ -79,8 +79,16 @@ def generate_certificate(name, common_name):
     #This creates another RSA key pair consisting of a private key and a corresponding public key, which will be used by an entity that needs a digital certificate.
 
     # Create a Certificate Signing Request (CSR) for the entity
-    subject = x509.Name([
-        x509.NameAttribute(NameOID.COMMON_NAME, name),
+   
+        # Create a certificate signing request (CSR)
+csr_subject = x509.Name([
+    x509.NameAttribute(NameOID.COUNTRY_NAME, "US"),
+    #ya zinou hamlik les attribus li zeethum--------------------------------------------------------------------------------------------------------------------
+    x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, "California"),
+    x509.NameAttribute(NameOID.LOCALITY_NAME, "San Francisco"),
+    x509.NameAttribute(NameOID.ORGANIZATION_NAME, "My Company"),
+    x509.NameAttribute(NameOID.COMMON_NAME, "www.example.com")
+])
     
     ])
     csr = x509.CertificateSigningRequestBuilder().subject_name(
