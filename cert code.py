@@ -23,7 +23,7 @@ from cryptography.x509.oid import NameOID
 import datetime
 
 
-def generate_certificate(name, common_name):
+def generate_certificate(name, common_name, country, state, locality):
     # Generate a public/private key pair for the CA
     private_key = rsa.generate_private_key(
         public_exponent=65537,
@@ -81,16 +81,15 @@ def generate_certificate(name, common_name):
     # Create a Certificate Signing Request (CSR) for the entity
    
         # Create a certificate signing request (CSR)
-csr_subject = x509.Name([
-    x509.NameAttribute(NameOID.COUNTRY_NAME, "US"),
+    csr_subject = x509.Name([
+    x509.NameAttribute(NameOID.COUNTRY_NAME, country),
     #ya zinou hamlik les attribus li zeethum--------------------------------------------------------------------------------------------------------------------
-    x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, "California"),
-    x509.NameAttribute(NameOID.LOCALITY_NAME, "San Francisco"),
-    x509.NameAttribute(NameOID.ORGANIZATION_NAME, "My Company"),
-    x509.NameAttribute(NameOID.COMMON_NAME, "www.example.com")
-])
-    
+    x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, state),
+    x509.NameAttribute(NameOID.LOCALITY_NAME, locality),
+    x509.NameAttribute(NameOID.ORGANIZATION_NAME, name),
+    x509.NameAttribute(NameOID.COMMON_NAME, common_name)
     ])
+
     csr = x509.CertificateSigningRequestBuilder().subject_name(
         subject
     ).add_extension(
