@@ -118,6 +118,3 @@ def generate_certificate(organization, common_name, country, state, city):
         f.write(builder.public_bytes(
             encoding=serialization.Encoding.PEM,
         ))
-
-
-generate_certificate("USTHB", "www.usthb.dz", "DZ", "Alger", "Alger")
