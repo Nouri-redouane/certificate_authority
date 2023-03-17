@@ -26,23 +26,24 @@ def download():
 
 @app.route('/generate-certificate', methods=['POST'])
 def generate_certificate():
-    common_name = request.form['cn']
-    organization = request.form['organization']
-    country = request.form['country']
-    state = request.form['state']
-    city = request.form['city']
-    print(common_name, organization, country, state, city)
-
-    # validate values and return error if invalid
-    if not validateValues([common_name, organization, country, state, city]):
-        # return html error page
-        print("--------Invalid values--------")
-        return render_template('error.html')
-
-    # generate certificate
     try:
-        generate_certificate(common_name, organization, country, state, city)
-        return redirect(url_for('download'))
+        common_name = request.form['cn']
+        organization = request.form['organization']
+        country = request.form['country']
+        state = request.form['state']
+        city = request.form['city']
+        print(common_name, organization, country, state, city)
+
+        # validate values and return error if invalid
+        if not validateValues([common_name, organization, country, state, city]):
+            # return html error page
+            print("--------Invalid values--------")
+            return render_template('error.html')
+
+        # generate certificate
+            generate_certificate(common_name, organization,
+                                 country, state, city)
+            return redirect(url_for('download'))
     except:
         print("--------Error generating certificate--------")
         return render_template('error.html')
