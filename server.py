@@ -36,11 +36,13 @@ def generate_certificate():
     # validate values and return error if invalid
     if not validateValues([common_name, organization, country, state, city]):
         # return html error page
+        print("--------Invalid values--------")
         return render_template('error.html')
 
-    # TODO: generate certificate
+    # generate certificate
     try:
         generate_certificate(common_name, organization, country, state, city)
         return redirect(url_for('download'))
     except:
+        print("--------Error generating certificate--------")
         return render_template('error.html')
