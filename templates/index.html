@@ -73,14 +73,26 @@
         </div>
         <div class="w-full flex items-center mb-7">
           <label for="country" class="w-32 font-semibold">Country: </label>
-          <input
+          <!-- <input
             type="text"
             name="country"
             id="country"
             class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
             placeholder="Country"
             required
-          />
+          /> -->
+          <select
+            name="country"
+            id="country"
+            class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
+          >
+            <option
+              value=""
+              class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
+            >
+              Select Country
+            </option>
+          </select>
         </div>
         <div class="w-full flex items-center mx-auto">
           <button
@@ -99,5 +111,23 @@
         </div>
       </form>
     </div>
+    <script>
+      // insert the country codes into the select tag
+      const select = document.getElementById("country");
+      fetch("https://restcountries.com/v3.1/all")
+        .then((response) => response.json())
+        .then((data) => {
+          const codes = data.map((country) => country.cca2);
+          codes.forEach((code) => {
+            const option = document.createElement("option");
+            option.value = code;
+            option.innerHTML = code;
+            select.appendChild(option);
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    </script>
   </body>
 </html>

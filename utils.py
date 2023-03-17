@@ -3,7 +3,7 @@ def validateValue(value):
     if value is None:
         print(value, "Value is None")
         return False
-    if len(value) < 3 or len(value) > 64:
+    if len(value) < 2 or len(value) > 64:
         print(value, "Value length is not between 3 and 64")
         return False
 
