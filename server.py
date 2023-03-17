@@ -41,9 +41,9 @@ def generate_certificate():
             return render_template('error.html')
 
         # generate certificate
-            generate_certificate(common_name, organization,
-                                 country, state, city)
-            return redirect(url_for('download'))
+        generate_certificate(common_name, organization,
+                             country, state, city)
+        return render_template('download.html')
     except:
         print("--------Error generating certificate--------")
         return render_template('error.html')
