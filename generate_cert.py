@@ -100,23 +100,28 @@ def generate_certificate(organization, common_name, country, state, city):
     ).sign(entity_private_key, hashes.SHA256())
 
     # Sign the CSR with the CA's private key to generate a digital certificate for the entity
-    builder = x509.CertificateBuilder().subject_name(
-        csr.subject
-    ).issuer_name(
-        issuer
-    ).public_key(
-        entity_public_key
-    ).serial_number(
-        x509.random_serial_number()
-    ).not_valid_before(
-        datetime.datetime.utcnow()
-    ).not_valid_after(
-        # Set the expiration time of the entity's certificate here
-        datetime.datetime.utcnow() + datetime.timedelta(days=365)
-    ).add_extension(
-        x509.SubjectAlternativeName([x509.DNSName(common_name)]),
-        critical=False,
-    ).sign(private_key, hashes.SHA256())
+    try:
+        builder = x509.CertificateBuilder().subject_name(
+            csr.subject
+        ).issuer_name(
+            issuer
+        ).public_key(
+            entity_public_key
+        ).serial_number(
+            x509.random_serial_number()
+        ).not_valid_before(
+            datetime.datetime.utcnow()
+        ).not_valid_after(
+            # Set the expiration time of the entity's certificate here
+            datetime.datetime.utcnow() + datetime.timedelta(days=365)
+        ).add_extension(
+            x509.SubjectAlternativeName([x509.DNSName(common_name)]),
+            critical=False,
+        ).sign(private_key, hashes.SHA256())
+    except (Exception):
+        print('------------------------------------')
+        print("Error signing CSR", Exception)
+        print('------------------------------------')
 
     # Save the entity's private key and certificate to files
     try:
@@ -140,4 +145,3 @@ def generate_certificate(organization, common_name, country, state, city):
         print('------------------------------------')
         print("Error saving entity certificate")
         print('------------------------------------')
-
