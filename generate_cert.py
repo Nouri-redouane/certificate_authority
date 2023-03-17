@@ -52,16 +52,27 @@ def generate_certificate(organization, common_name, country, state, city):
     # This creates a self-signed digital certificate for the CA using the private key generated in step 2. The certificate contains information about the CA, such as its name, public key, and expiration date. It also includes an extension that identifies the certificate as a CA certificate and sets its path length constraint to None.
 
     # Save the CA's private key and certificate to files
-    with open("./keys/ca.key", "wb") as f:
-        f.write(private_key.private_bytes(
-            encoding=serialization.Encoding.PEM,
-            format=serialization.PrivateFormat.TraditionalOpenSSL,
-            encryption_algorithm=serialization.NoEncryption()
-        ))
-    with open("./certificates/ca.crt", "wb") as f:
-        f.write(issuer_cert.public_bytes(
-            encoding=serialization.Encoding.PEM,
-        ))
+    try:
+        with open("./keys/ca.key", "wb") as f:
+            f.write(private_key.private_bytes(
+                encoding=serialization.Encoding.PEM,
+                format=serialization.PrivateFormat.TraditionalOpenSSL,
+                encryption_algorithm=serialization.NoEncryption()
+            ))
+    except:
+        print('------------------------------------')
+        print("Error saving CA private key")
+        print('------------------------------------')
+
+    try:
+        with open("./certificates/ca.crt", "wb") as f:
+            f.write(issuer_cert.public_bytes(
+                encoding=serialization.Encoding.PEM,
+            ))
+    except:
+        print('------------------------------------')
+        print("Error saving CA certificate")
+        print('------------------------------------')
 
     # Generate a public/private key pair for the entity that needs a digital certificate
     entity_private_key = rsa.generate_private_key(
@@ -108,13 +119,24 @@ def generate_certificate(organization, common_name, country, state, city):
     ).sign(private_key, hashes.SHA256())
 
     # Save the entity's private key and certificate to files
-    with open("./keys/entity.key", "wb") as f:
-        f.write(entity_private_key.private_bytes(
-            encoding=serialization.Encoding.PEM,
-            format=serialization.PrivateFormat.TraditionalOpenSSL,
-            encryption_algorithm=serialization.NoEncryption()
-        ))
-    with open("./certificates/entity.crt", "wb") as f:
-        f.write(builder.public_bytes(
-            encoding=serialization.Encoding.PEM,
-        ))
+    try:
+        with open("./keys/entity.key", "wb") as f:
+            f.write(entity_private_key.private_bytes(
+                encoding=serialization.Encoding.PEM,
+                format=serialization.PrivateFormat.TraditionalOpenSSL,
+                encryption_algorithm=serialization.NoEncryption()
+            ))
+    except:
+        print('------------------------------------')
+        print("Error saving entity private key")
+        print('------------------------------------')
+
+    try:
+        with open("./certificates/entity.crt", "wb") as f:
+            f.write(builder.public_bytes(
+                encoding=serialization.Encoding.PEM,
+            ))
+    except:
+        print('------------------------------------')
+        print("Error saving entity certificate")
+        print('------------------------------------')

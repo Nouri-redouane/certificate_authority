@@ -25,7 +25,7 @@ def download():
 #   City: string
 
 @app.route('/generate-certificate', methods=['POST'])
-def generate_certificate():
+def generate_cert():
     try:
         common_name = request.form['cn']
         organization = request.form['organization']
