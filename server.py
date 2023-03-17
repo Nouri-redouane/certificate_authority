@@ -11,9 +11,9 @@ def index():
 
 
 # /generate-csr : GET
-@app.route('/generate-csr')
-def generate_csr():
-    return render_template('generate-csr.html')
+@app.route('/download')
+def download():
+    return render_template('download.html')
 
 
 # /generate-certificate : POST
@@ -33,13 +33,15 @@ def generate_certificate():
     city = request.form['city']
     print(common_name, organization, country, state, city)
 
-    
-
     # validate values and return error if invalid
     if not validateValues([common_name, organization, country, state, city]):
         # return html error page
         return render_template('error.html')
-    
-    # TODO: generate certificate
 
-    return redirect(url_for('index'))
+    # TODO: generate certificate
+    try:
+        generate_certificate(common_name, organization, country, state, city)
+    except:
+        return render_template('error.html')
+
+    return redirect(url_for('download'))
