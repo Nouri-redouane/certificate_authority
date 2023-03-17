@@ -33,6 +33,7 @@
             id="cn"
             class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
             placeholder="Common Name"
+            required
           />
         </div>
         <div class="w-full flex items-center mb-7">
@@ -45,6 +46,7 @@
             id="organization"
             class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
             placeholder="Organization"
+            required
           />
         </div>
         <div class="w-full flex items-center mb-7">
@@ -55,6 +57,7 @@
             id="city"
             class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
             placeholder="City"
+            required
           />
         </div>
         <div class="w-full flex items-center mb-7">
@@ -65,6 +68,7 @@
             id="state"
             class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
             placeholder="State"
+            required
           />
         </div>
         <div class="w-full flex items-center mb-7">
@@ -75,6 +79,7 @@
             id="country"
             class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
             placeholder="Country"
+            required
           />
         </div>
         <div class="w-full flex items-center mx-auto">
@@ -94,21 +99,5 @@
         </div>
       </form>
     </div>
-    <script src="https://unpkg.com/validator@latest/validator.min.js"></script>
-    <script>
-      console.log("hello world");
-
-      // form
-      const form = document.getElementById("csr-form");
-      const submitBtn = document.getElementById("submit-btn");
-
-      // form fields
-      const cn = document.getElementById("cn");
-      const organization = document.getElementById("organization");
-      const city = document.getElementById("city");
-      const state = document.getElementById("state");
-      const country = document.getElementById("country");
-
-    </script>
   </body>
 </html>

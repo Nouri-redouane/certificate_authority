@@ -140,3 +140,4 @@ def generate_certificate(organization, common_name, country, state, city):
         print('------------------------------------')
         print("Error saving entity certificate")
         print('------------------------------------')
+
