@@ -1,15 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Donwload</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSR</title>
-</head>
+  <body>
+    <!-- create a page with title: download you certicate and keys -->
+    <!-- and provide user with # buttons to download them -->
+    <div class="bg-gray-100 rounded-lg h-screen p-12 pt-8">
+      <!-- Title -->
+      <div class="flex justify-center">
+        <h1 class="text-3xl font-bold mb-10">Get your certificate</h1>
+      </div>
 
-<body>
-    <h1>CSR Request Page</h1>
-</body>
+      <!-- Download buttons -->
+      <div
+        class="w-10/12 mx-auto px-12 pt-10 pb-7 border-4 border-gray-300 border-dashed rounded-lg flex justify-center"
+      >
+        <div class="flex flex-col items-center">
+          <button
+            id="certificate"
+            class="h-12 w-48 m-auto rounded-lg text-center bg-blue-200 font-medium"
+            onclick="downloadFile('../certificates/entity.crt')"
+          >
+            Download Certificate
+          </button>
+          <button
+            id="privateKey"
+            class="h-12 w-48 m-auto rounded-lg text-center bg-green-200 font-medium"
+            onclick="downloadFile('../certificates/entity.key')"
+          >
+            Download Private Key
+          </button>
+        </div>
+      </div>
+    </div>
 
+    <script>
+      // add event listeners to buttons
+      // to download the files
+
+      // get the buttons
+      const downloadCertificate = document.getElementById("certificate");
+      const downloadPrivateKey = document.getElementById("privateKey");
+      const downloadPublicKey = document.getElementById("publicKey");
+
+      function downloadFile(path) {
+        // Create a new anchor element
+        var downloadLink = document.createElement("a");
+
+        // Set the file name and href attribute for the download link
+        downloadLink.setAttribute("download", "certificate.crt");
+        downloadLink.setAttribute("href", path);
+
+        // Simulate a click on the download link
+        downloadLink.click();
+      }
+    </script>
+  </body>
 </html>
