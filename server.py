@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from utils import validateValues
+from generate_cert import generate_certificate
 
 app = Flask(__name__)
 
@@ -31,6 +32,8 @@ def generate_certificate():
     state = request.form['state']
     city = request.form['city']
     print(common_name, organization, country, state, city)
+
+    
 
     # validate values and return error if invalid
     if not validateValues([common_name, organization, country, state, city]):
