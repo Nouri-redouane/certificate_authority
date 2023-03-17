@@ -41,7 +41,6 @@ def generate_certificate():
     # TODO: generate certificate
     try:
         generate_certificate(common_name, organization, country, state, city)
+        return redirect(url_for('download'))
     except:
         return render_template('error.html')
-
-    return redirect(url_for('download'))
