@@ -11,19 +11,15 @@ elle va contenir les informations sur le client (nom de l'entité , pays , addre
 # généralement cryptography lazem tala3ha (pip install cryptography)
 
 
-
-
-
-
-
-from cryptography import x509 # c'est la nomre utilisé pour créer les certif (chouf fl cours te3 belkhir )
+# c'est la nomre utilisé pour créer les certif (chouf fl cours te3 belkhir )
+from cryptography import x509
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.x509.oid import NameOID
 import datetime
 
 
-def generate_certificate(name, common_name, country, state, locality):
+def generate_certificate(organization, common_name, country, state, city):
     # Generate a public/private key pair for the CA
     private_key = rsa.generate_private_key(
         public_exponent=65537,
@@ -33,8 +29,9 @@ def generate_certificate(name, common_name, country, state, locality):
 
     # Create a self-signed certificate for the CA using the private key
     subject = issuer = x509.Name([
-        x509.NameAttribute(NameOID.COMMON_NAME, u'USTHB certificate authority'),
-        
+        x509.NameAttribute(NameOID.COMMON_NAME,
+                           u'USTHB certificate authority'),
+
     ])
     issuer_cert = x509.CertificateBuilder().subject_name(
         subject
@@ -52,11 +49,7 @@ def generate_certificate(name, common_name, country, state, locality):
     ).add_extension(
         x509.BasicConstraints(ca=True, path_length=None), critical=True
     ).sign(private_key, hashes.SHA256())
-    #This creates a self-signed digital certificate for the CA using the private key generated in step 2. The certificate contains information about the CA, such as its name, public key, and expiration date. It also includes an extension that identifies the certificate as a CA certificate and sets its path length constraint to None.
-
-
-
-
+    # This creates a self-signed digital certificate for the CA using the private key generated in step 2. The certificate contains information about the CA, such as its name, public key, and expiration date. It also includes an extension that identifies the certificate as a CA certificate and sets its path length constraint to None.
 
     # Save the CA's private key and certificate to files
     with open("ca.key", "wb") as f:
@@ -76,18 +69,18 @@ def generate_certificate(name, common_name, country, state, locality):
         key_size=2048
     )
     entity_public_key = entity_private_key.public_key()
-    #This creates another RSA key pair consisting of a private key and a corresponding public key, which will be used by an entity that needs a digital certificate.
+    # This creates another RSA key pair consisting of a private key and a corresponding public key, which will be used by an entity that needs a digital certificate.
 
     # Create a Certificate Signing Request (CSR) for the entity
-   
-        # Create a certificate signing request (CSR)
+
+    # Create a certificate signing request (CSR)
     csr_subject = x509.Name([
-    x509.NameAttribute(NameOID.COUNTRY_NAME, country),
-    #ya zinou hamlik les attribus li zeethum--------------------------------------------------------------------------------------------------------------------
-    x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, state),
-    x509.NameAttribute(NameOID.LOCALITY_NAME, locality),
-    x509.NameAttribute(NameOID.ORGANIZATION_NAME, name),
-    x509.NameAttribute(NameOID.COMMON_NAME, common_name)
+        x509.NameAttribute(NameOID.COUNTRY_NAME, country),
+        # ya zinou hamlik les attribus li zeethum--------------------------------------------------------------------------------------------------------------------
+        x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, state),
+        x509.NameAttribute(NameOID.city_NAME, city),
+        x509.NameAttribute(NameOID.ORGANIZATION_NAME, organization),
+        x509.NameAttribute(NameOID.COMMON_NAME, common_name)
     ])
 
     csr = x509.CertificateSigningRequestBuilder().subject_name(
@@ -126,4 +119,3 @@ def generate_certificate(name, common_name, country, state, locality):
         f.write(builder.public_bytes(
             encoding=serialization.Encoding.PEM,
         ))
-
