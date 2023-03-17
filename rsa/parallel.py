@@ -28,7 +28,7 @@ def getprime(nbits: int, poolsize: int) -> int:
     >>> rsa.prime.is_prime(p+1)
     False
 
-    >>> from rsa import common
+    >>> import common
     >>> common.bit_size(p) == 128
     True
 

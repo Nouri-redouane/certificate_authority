@@ -151,7 +151,7 @@ def encrypt(message: bytes, pub_key: key.PublicKey) -> bytes:
     :raise OverflowError: when the message is too large to fit in the padded
         block.
 
-    >>> from rsa import key, common
+    >>> import key, common
     >>> (pub_key, priv_key) = key.newkeys(256)
     >>> message = b'hello'
     >>> crypto = encrypt(message, pub_key)

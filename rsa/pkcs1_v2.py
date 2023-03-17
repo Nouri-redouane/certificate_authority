@@ -1,8 +1,8 @@
-from rsa import (
-    common,
-    pkcs1,
-    transform,
-)
+
+import common
+import pkcs1
+import transform
+
 
 
 def mgf1(seed: bytes, length: int, hasher: str = "SHA-1") -> bytes:

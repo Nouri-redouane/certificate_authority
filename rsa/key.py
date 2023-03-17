@@ -614,14 +614,14 @@ def find_p_q(
     :returns: (p, q), where p > q
 
     >>> (p, q) = find_p_q(128)
-    >>> from rsa import common
+    >>> import common
     >>> common.bit_size(p * q)
     256
 
     When not in accurate mode, the number of bits can be slightly less
 
     >>> (p, q) = find_p_q(128, accurate=False)
-    >>> from rsa import common
+    >>> import common
     >>> common.bit_size(p * q) <= 256
     True
     >>> common.bit_size(p * q) > 240
@@ -794,7 +794,7 @@ def newkeys(
 
     # Determine which getprime function to use
     if poolsize > 1:
-        from rsa import parallel
+        import parallel
 
         def getprime_func(nbits: int) -> int:
             return parallel.getprime(nbits, poolsize=poolsize)

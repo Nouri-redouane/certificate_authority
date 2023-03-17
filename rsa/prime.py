@@ -132,7 +132,7 @@ def getprime(nbits: int) -> int:
     >>> is_prime(p+1)
     False
 
-    >>> from rsa import common
+    >>> import common
     >>> common.bit_size(p) == 128
     True
     """
