@@ -52,13 +52,13 @@ def generate_certificate(organization, common_name, country, state, city):
     # This creates a self-signed digital certificate for the CA using the private key generated in step 2. The certificate contains information about the CA, such as its name, public key, and expiration date. It also includes an extension that identifies the certificate as a CA certificate and sets its path length constraint to None.
 
     # Save the CA's private key and certificate to files
-    with open("ca.key", "wb") as f:
+    with open("./keys/ca.key", "wb") as f:
         f.write(private_key.private_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PrivateFormat.TraditionalOpenSSL,
             encryption_algorithm=serialization.NoEncryption()
         ))
-    with open("ca.crt", "wb") as f:
+    with open("./certificates/ca.crt", "wb") as f:
         f.write(issuer_cert.public_bytes(
             encoding=serialization.Encoding.PEM,
         ))
@@ -109,13 +109,13 @@ def generate_certificate(organization, common_name, country, state, city):
     ).sign(private_key, hashes.SHA256())
 
     # Save the entity's private key and certificate to files
-    with open("entity.key", "wb") as f:
+    with open("./keys/entity.key", "wb") as f:
         f.write(entity_private_key.private_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PrivateFormat.TraditionalOpenSSL,
             encryption_algorithm=serialization.NoEncryption()
         ))
-    with open("entity.crt", "wb") as f:
+    with open("./certificates/entity.crt", "wb") as f:
         f.write(builder.public_bytes(
             encoding=serialization.Encoding.PEM,
         ))
