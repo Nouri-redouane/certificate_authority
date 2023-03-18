@@ -2,7 +2,16 @@ import hashlib
 import os
 import sys
 import typing
-from hmac import compare_digest
+import warnings as _warnings
+try:
+    import _hashlib as _hashopenssl
+except ImportError:
+    _hashopenssl = None
+    _functype = None
+    from _operator import _compare_digest as compare_digest
+else:
+    compare_digest = _hashopenssl.compare_digest
+    _functype = type(_hashopenssl.openssl_sha256)  # builtin type
 
 import common, transform, core, key
 

