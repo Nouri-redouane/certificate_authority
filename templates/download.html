@@ -25,20 +25,30 @@
       <div
         class="w-10/12 flex items-center mx-auto px-12 pt-10 pb-7 border-4 border-gray-300 border-dashed rounded-lg"
       >
-        <button
-          id="certificate"
-          class="h-12 w-60 flex items-center justify-evenly m-auto rounded-lg text-center bg-blue-200 font-medium"
+        <!-- on clicking on downlod certificate button we ;ake GET request to /download/certificate -->
+        <!-- on clicking on downlod private key button we ;ake GET request to /download/private-key -->
+        <form action="http://localhost:5000/download/certificate" method="get" class="h-12 w-60 m-auto">
+          <button
+            id="certificate"
+            class="h-12 w-60 flex items-center justify-evenly m-auto rounded-lg text-center bg-blue-200 font-medium"
+          >
+            <span>Download Certificate</span>
+            <i class="material-icons">description</i>
+          </button>
+        </form>
+        <form
+          action="http://localhost:5000/download/private-key"
+          method="get"
+          class="h-12 w-60 m-auto"
         >
-          <span>Download Certificate</span>
-          <i class="material-icons">description</i>
-        </button>
-        <button
-          id="privateKey"
-          class="h-12 w-60 flex items-center justify-evenly m-auto rounded-lg text-center bg-green-200 font-medium"
-        >
-          <span>Download Private Key</span>
-          <i class="material-icons">key</i>
-        </button>
+          <button
+            id="privateKey"
+            class="h-full w-full flex items-center justify-evenly m-auto rounded-lg text-center bg-green-200 font-medium"
+          >
+            <span>Download Private Key</span>
+            <i class="material-icons">key</i>
+          </button>
+        </form>
       </div>
     </div>
 
@@ -67,24 +77,6 @@
       //  // Remove the download link from the document body
       //  document.body.removeChild(downloadLink);
       //}
-
-      downloadCertificate.addEventListener("click", () => {
-        // make a request to the server to download the file : /download/certificate
-        // and then download the file
-        fetch("/download/certificate", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      });
 
       downloadPrivateKey.addEventListener("click", () => {
         downloadFile("PrivKey.key", "keys/entity.key");

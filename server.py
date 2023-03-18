@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, send_file
 from utils import validateValues
 from generate_cert import generate_certificate
+import os
 
 app = Flask(__name__)
 
@@ -15,13 +16,24 @@ def index():
 def download():
     return render_template('download.html')
 
+
 # /download/certificate : GET
-
-
 @app.route('/download/certificate')
 def download_cert():
     print('DOWNLOADING CERTIFICATE...')
-    return send_file('certificates/certificate.crt', as_attachment=True)
+    file = send_file(
+        '/home/zineddine/Desktop/Programming/Python-Projects/crypto_flask_server/certificates/entity.crt', as_attachment=True)
+    return file
+
+# /download/private-key : GET
+
+
+@app.route('/download/private-key')
+def download_private_key():
+    print('DOWNLOADING PRIVATE KEY...')
+    file = send_file(
+        '/home/zineddine/Desktop/Programming/Python-Projects/crypto_flask_server/keys/entity.key', as_attachment=True)
+    return file
 
 
 # /generate-certificate : POST
