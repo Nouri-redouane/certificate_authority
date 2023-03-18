@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, abort
+from flask import Flask, render_template, request, redirect, url_for, session, send_file
 from utils import validateValues
 from generate_cert import generate_certificate
 
@@ -14,6 +14,14 @@ def index():
 @app.route('/download')
 def download():
     return render_template('download.html')
+
+# /download/certificate : GET
+
+
+@app.route('/download/certificate')
+def download_cert():
+    print('DOWNLOADING CERTIFICATE...')
+    return send_file('certificates/certificate.crt', as_attachment=True)
 
 
 # /generate-certificate : POST
@@ -41,4 +49,6 @@ def gen_cert():
 
     generate_certificate(organization, common_name, country, state, city)
     # generate certificate
+    # download certificate
+
     return render_template('download.html')

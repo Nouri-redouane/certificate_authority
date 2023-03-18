@@ -28,7 +28,6 @@
         <button
           id="certificate"
           class="h-12 w-60 flex items-center justify-evenly m-auto rounded-lg text-center bg-blue-200 font-medium"
-          onclick="downloadFile( 'certificate.crt','../certificates/entity.crt')"
         >
           <span>Download Certificate</span>
           <i class="material-icons">description</i>
@@ -36,7 +35,6 @@
         <button
           id="privateKey"
           class="h-12 w-60 flex items-center justify-evenly m-auto rounded-lg text-center bg-green-200 font-medium"
-          onclick="downloadFile('PrivKey.key','../certificates/entity.key')"
         >
           <span>Download Private Key</span>
           <i class="material-icons">key</i>
@@ -52,23 +50,45 @@
       const downloadCertificate = document.getElementById("certificate");
       const downloadPrivateKey = document.getElementById("privateKey");
 
-      function downloadFile(name, path) {
-        // Create a new anchor element
-        var downloadLink = document.createElement("a");
+      //function downloadFile(name, path) {
+      //  // Create a new anchor element
+      //  var downloadLink = document.createElement("a");
+      //
+      //  // Set the file name and href attribute for the download link
+      //  downloadLink.setAttribute("download", name);
+      //  downloadLink.setAttribute("href", path);
+      //
+      //  // Append the download link to the document body
+      //  document.body.appendChild(downloadLink);
+      //
+      //  // Simulate a click on the download link
+      //  downloadLink.click();
+      //
+      //  // Remove the download link from the document body
+      //  document.body.removeChild(downloadLink);
+      //}
 
-        // Set the file name and href attribute for the download link
-        downloadLink.setAttribute("download", name);
-        downloadLink.setAttribute("href", path);
+      downloadCertificate.addEventListener("click", () => {
+        // make a request to the server to download the file : /download/certificate
+        // and then download the file
+        fetch("/download/certificate", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
 
-        // Append the download link to the document body
-        document.body.appendChild(downloadLink);
-
-        // Simulate a click on the download link
-        downloadLink.click();
-
-        // Remove the download link from the document body
-        document.body.removeChild(downloadLink);
-      }
+      downloadPrivateKey.addEventListener("click", () => {
+        downloadFile("PrivKey.key", "keys/entity.key");
+      });
     </script>
   </body>
 </html>
