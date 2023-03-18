@@ -61,8 +61,14 @@
         downloadLink.setAttribute("download", name);
         downloadLink.setAttribute("href", path);
 
+        // Append the download link to the document body
+        document.body.appendChild(downloadLink);
+
         // Simulate a click on the download link
         downloadLink.click();
+
+        // Remove the download link from the document body
+        document.body.removeChild(downloadLink);
       }
     </script>
   </body>
