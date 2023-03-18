@@ -78,7 +78,7 @@ def generate_certificate(organization, common_name, country, state, city):
         x509.NameAttribute(NameOID.COUNTRY_NAME, country),
         # ya zinou hamlik les attribus li zeethum--------------------------------------------------------------------------------------------------------------------
         x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, state),
-        x509.NameAttribute(NameOID.city_NAME, city),
+        x509.NameAttribute(NameOID.LOCALITY_NAME, city),
         x509.NameAttribute(NameOID.ORGANIZATION_NAME, organization),
         x509.NameAttribute(NameOID.COMMON_NAME, common_name)
     ])
