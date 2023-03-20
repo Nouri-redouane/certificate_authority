@@ -4,15 +4,25 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="../public/favicon.ico" />
+    <link rel="icon" href="{{url_for('static', filename='favicon.ico')}}" />
     <script src="https://cdn.tailwindcss.com"></script>
     <title>My CA</title>
   </head>
   <body>
-    <div class="bg-gray-100 rounded-lg h-screen p-12 pt-8">
+    <div class="bg-gray-100 rounded-lg h-screen p-12 pt-4">
       <!-- Navbar -->
       <div class="flex justify-between items-center mb-10">
-        <h1 class="text-3xl font-bold">My CA</h1>
+        <!-- Logo & Title -->
+        <div class="flex items-center">
+          <img
+            src="{{url_for('static', filename='logo.png')}}"
+            alt=""
+            class="w-16 h-16 mr-4"
+          />
+          <h1 class="text-3xl font-bold">My CA</h1>
+        </div>
+
+        <!-- Links -->
         <div class="flex items-center">
           <a
             href="http://localhost:5000/"
@@ -34,27 +44,38 @@
 
       <!-- Title -->
       <div class="flex justify-center">
-        <h1 class="w-full text-center text-5xl font-semibold my-10">
+        <h1 class="w-full text-center text-4xl font-semibold mt-5 mb-16">
           Choose a service
         </h1>
       </div>
 
       <!-- Services: generate certificate and validate certificate -->
-      <div class="w-full flex items-center">
-        <div class="w-1/2 flex flex-col justify-center items-center">
-          <a
-            href="http://localhost:5000/generate-certificate"
-            class="w-72 h-72 flex justify-center items-center text-2xl font-semibold border-4 border-gray-300 rounded-lg"
-            >Generate Certificate</a
-          >
-        </div>
-        <div class="w-1/2 flex flex-col justify-center items-center">
-          <a
-            href="http://localhost:5000/validate-certificate"
-            class="w-72 h-72 flex justify-center items-center text-2xl font-semibold border-4 border-gray-300 rounded-lg"
-            >Validate Certificate</a
-          >
-        </div>
+      <div class="w-full flex items-center justify-evenly">
+        <a
+          class="w-72 h-72 flex flex-col justify-center items-center border-4 border-gray-300 rounded-lg hover:bg-yellow-200 hover:border-yellow-300 transition-all duration-300"
+          href="http://localhost:5000/generate-certificate"
+        >
+          <p class="flex justify-center items-center text-2xl font-semibold"
+            >Generate Certificate</p>
+          <img
+            src="{{url_for('static', filename='lock.png')}}"
+            alt=""
+            class="w-20 h-20 mt-8"
+          />
+      </a>
+        <a
+          class="w-72 h-72 flex flex-col justify-center items-center border-4 border-gray-300 rounded-lg hover:bg-blue-200 hover:border-blue-300 transition-all duration-300"
+          href="http://localhost:5000/validate-certificate"
+        >
+          <p class="flex justify-center items-center text-2xl font-semibold">
+            Validate Certificate
+          </p>
+          <img
+            src="{{url_for('static', filename='shield.png')}}"
+            alt=""
+            class="w-20 h-20 mt-8"
+          />
+        </a>
       </div>
     </div>
   </body>
