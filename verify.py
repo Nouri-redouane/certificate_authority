@@ -1,25 +1,21 @@
-from cryptography import x509
-from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
-from cryptography.hazmat.backends import default_backend
+from cryptography import x509
 
-cert_file = open("entity.crt", "rb")
-cert_data = cert_file.read()
-cert = x509.load_pem_x509_certificate(data=cert_data)
+def verify(filename):
 
-# chain contains the Let's Encrypt certificate 
-chain_file = open("ca.crt", "rb")
-chain_data = chain_file.read()
-chain = x509.load_pem_x509_certificate(data=chain_data)
+    cert_to_check = x509.load_pem_x509_certificate(data=open("uploads/"+filename, "rb").read())
+    ca_cer = x509.load_pem_x509_certificate(data=open("ca.crt", "rb").read())
+    issuer_public_key = ca_cer.public_key()
 
-public_key = chain.public_key()
-print(cert.signature)
-verifier = public_key.verify(
-                signature = cert.signature,
-                data=cert_data,
-                padding = padding.PKCS1v15(),
-                algorithm = hashes.SHA256())
-verifier.update(cert.tbs_certificate_bytes)
-verifier.verify()
-
-# throws an InvalidSignature exception, but using verifying with openssl works.
+    try:
+        issuer_public_key.verify(
+            cert_to_check.signature,
+            cert_to_check.tbs_certificate_bytes,
+            # Depends on the algorithm used to create the certificate
+            padding.PKCS1v15(),
+            cert_to_check.signature_hash_algorithm,
+        )
+        
+        return True
+    except:
+        return False
