@@ -33,7 +33,27 @@
 
       <!-- Title -->
       <div class="flex justify-center">
-        <h1 class="text-3xl font-bold mb-10">Choose a server</h1>
+        <h1 class="w-full text-center text-5xl font-semibold my-10">
+          Choose a service
+        </h1>
+      </div>
+
+      <!-- Services: generate certificate and validate certificate -->
+      <div class="w-full flex items-center">
+        <div class="w-1/2 flex flex-col justify-center items-center">
+          <a
+            href="http://localhost:5000/generate-certificate"
+            class="w-72 h-96 flex justify-center items-center border-4 border-gray-300 rounded-lg"
+            >Generate Certificate</a
+          >
+        </div>
+        <div class="w-1/2 flex flex-col justify-center items-center">
+          <a
+            href="http://localhost:5000/validate-certificate"
+            class="w-72 h-96 flex justify-center items-center border-4 border-gray-300 rounded-lg"
+            >Validate Certificate</a
+          >
+        </div>
       </div>
     </div>
   </body>
