@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Certificate Generation Software</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body>
+    <!-- create a page with title: certificate generation and a form that contains :
+        CN, Organization, City, State and Country -->
+
+    <div class="bg-gray-100 rounded-lg h-screen p-12 pt-8">
+      <!-- Title -->
+      <div class="flex justify-center">
+        <h1 class="text-3xl font-bold mb-10">Certificate Generation</h1>
+      </div>
+
+      <!-- Form -->
+      <form
+        class="w-10/12 flex flex-col justify-center mx-auto px-12 pt-10 pb-7 border-4 border-gray-300 border-dashed rounded-lg"
+        id="csr-form"
+        action="http://localhost:5000/generate-certificate"
+        method="post"
+      >
+        <div class="w-full flex items-center mb-7">
+          <label for="cn" class="w-32 font-semibold">CN: </label>
+          <input
+            type="text"
+            name="cn"
+            id="cn"
+            class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
+            placeholder="Common Name"
+            required
+          />
+        </div>
+        <div class="w-full flex items-center mb-7">
+          <label for="organization" class="w-32 font-semibold"
+            >Organization:
+          </label>
+          <input
+            type="text"
+            name="organization"
+            id="organization"
+            class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
+            placeholder="Organization"
+            required
+          />
+        </div>
+        <div class="w-full flex items-center mb-7">
+          <label for="city" class="w-32 font-semibold">City: </label>
+          <input
+            type="text"
+            name="city"
+            id="city"
+            class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
+            placeholder="City"
+            required
+          />
+        </div>
+        <div class="w-full flex items-center mb-7">
+          <label for="state" class="w-32 font-semibold">State: </label>
+          <input
+            type="text"
+            name="state"
+            id="state"
+            class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
+            placeholder="State"
+            required
+          />
+        </div>
+        <div class="w-full flex items-center mb-7">
+          <label for="country" class="w-32 font-semibold">Country: </label>
+          <!-- <input
+            type="text"
+            name="country"
+            id="country"
+            class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
+            placeholder="Country"
+            required
+          /> -->
+          <select
+            name="country"
+            id="country"
+            class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none bg-white text-gray-700"
+            required
+          >
+            <option
+              value=""
+              class="flex-1 h-12 py-1 px-3 rounded-lg border-none outline-none text-gray-700"
+            >
+              Select Country
+            </option>
+          </select>
+        </div>
+        <div class="w-full flex items-center mx-auto">
+          <button
+            type="reset"
+            class="h-12 w-48 m-auto rounded-lg text-center bg-red-300"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            id="submit-btn"
+            class="h-12 w-48 m-auto rounded-lg text-center bg-gray-300 font-medium"
+          >
+            Generate Certifiate
+          </button>
+        </div>
+      </form>
+    </div>
+    <script>
+      // insert the country codes into the select tag
+      const select = document.getElementById("country");
+      fetch("https://restcountries.com/v3.1/all")
+        .then((response) => response.json())
+        .then((data) => {
+          const codes = data.map((country) => country.cca2);
+          codes.forEach((code) => {
+            const option = document.createElement("option");
+            option.value = code;
+            option.innerHTML = code;
+            select.appendChild(option);
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    </script>
+  </body>
+</html>
