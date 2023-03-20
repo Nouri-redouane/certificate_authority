@@ -5,14 +5,25 @@ from generate_cert import generate_certificate
 app = Flask(__name__)
 
 # / : GET
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
 # /generate-certificate : GET
+
+
 @app.route('/generate-certificate')
 def generate_certificate_page():
     return render_template('generate_certificate.html')
+
+# /validate-certificate : GET
+
+
+@app.route('/validate-certificate')
+def validate_certificate_page():
+    return render_template('validate_certificate.html')
 
 
 # /download : GET
@@ -28,7 +39,6 @@ def download_cert():
     file = send_file(
         '/home/zineddine/Desktop/Programming/Python-Projects/crypto_flask_server/certificates/entity.crt', as_attachment=True)
     return file
-
 
 
 # /download/private-key : GET
