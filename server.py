@@ -18,11 +18,23 @@ def index():
 def generate_certificate_page():
     return render_template('generate_certificate.html')
 
+
 # /validate-certificate : GET
-
-
 @app.route('/validate-certificate')
 def validate_certificate_page():
+    return render_template('validate_certificate.html')
+
+# /validate-certificate : POST
+# params:
+#   Certificate: file.crt
+#   Private Key: file.key
+@app.route('/validate-certificate', methods=['POST'])
+def validate_certificate():
+    # save certificate and private key in uploads folder
+    
+    # validate certificate
+    # validate private key
+    # return result
     return render_template('validate_certificate.html')
 
 
