@@ -35,6 +35,8 @@ def validate_certificate():
     cert.save('uploads/certificate.crt')
     print('VALIDATING CERTIFICATE...')
     # validate certificate
+    # result = validate_certificate()
+    
     # return result
     return render_template('validate_certificate.html')
 
