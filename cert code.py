@@ -16,16 +16,21 @@ from cryptography import x509
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.x509.oid import NameOID
+from cryptography.hazmat.primitives.serialization import load_pem_private_key
 import datetime
 
 
 def generate_certificate(organization, common_name, country, state, city):
     # Generate a public/private key pair for the CA
-    private_key = rsa.generate_private_key(
-        public_exponent=65537,
-        key_size=2048
-    )
-    public_key = private_key.public_key()
+    # ca_private_key = rsa.generate_private_key(
+    #     public_exponent=65537,
+    #     key_size=2048
+    # )
+
+    key_data = open("ca.key", "rb").read()
+    ca_private_key = load_pem_private_key(key_data, password=None)
+
+    #public_key = ca_private_key.public_key()
 
     # Create a self-signed certificate for the CA using the private key
     subject = issuer = x509.Name([
@@ -33,35 +38,35 @@ def generate_certificate(organization, common_name, country, state, city):
                            u'USTHB certificate authority'),
 
     ])
-    issuer_cert = x509.CertificateBuilder().subject_name(
-        subject
-    ).issuer_name(
-        issuer
-    ).public_key(
-        public_key
-    ).serial_number(
-        x509.random_serial_number()
-    ).not_valid_before(
-        datetime.datetime.utcnow()
-    ).not_valid_after(
-        # Set the expiration time of the CA's certificate here
-        datetime.datetime.utcnow() + datetime.timedelta(days=365)
-    ).add_extension(
-        x509.BasicConstraints(ca=True, path_length=None), critical=True
-    ).sign(private_key, hashes.SHA256())
+    # issuer_cert = x509.CertificateBuilder().subject_name(
+    #     subject
+    # ).issuer_name(
+    #     issuer
+    # ).public_key(
+    #     public_key
+    # ).serial_number(
+    #     x509.random_serial_number()
+    # ).not_valid_before(
+    #     datetime.datetime.utcnow()
+    # ).not_valid_after(
+    #     # Set the expiration time of the CA's certificate here
+    #     datetime.datetime.utcnow() + datetime.timedelta(days=365)
+    # ).add_extension(
+    #     x509.BasicConstraints(ca=True, path_length=None), critical=True
+    # ).sign(ca_private_key, hashes.SHA256())
     # This creates a self-signed digital certificate for the CA using the private key generated in step 2. The certificate contains information about the CA, such as its name, public key, and expiration date. It also includes an extension that identifies the certificate as a CA certificate and sets its path length constraint to None.
 
     # Save the CA's private key and certificate to files
-    with open("ca.key", "wb") as f:
-        f.write(private_key.private_bytes(
-            encoding=serialization.Encoding.PEM,
-            format=serialization.PrivateFormat.TraditionalOpenSSL,
-            encryption_algorithm=serialization.NoEncryption()
-        ))
-    with open("ca.crt", "wb") as f:
-        f.write(issuer_cert.public_bytes(
-            encoding=serialization.Encoding.PEM,
-        ))
+    # with open("ca.key", "wb") as f:
+    #     f.write(ca_private_key.private_bytes(
+    #         encoding=serialization.Encoding.PEM,
+    #         format=serialization.PrivateFormat.TraditionalOpenSSL,
+    #         encryption_algorithm=serialization.NoEncryption()
+    #     ))
+    # with open("ca.crt", "wb") as f:
+    #     f.write(issuer_cert.public_bytes(
+    #         encoding=serialization.Encoding.PEM,
+    #     ))
 
     # Generate a public/private key pair for the entity that needs a digital certificate
     entity_private_key = rsa.generate_private_key(
@@ -76,7 +81,6 @@ def generate_certificate(organization, common_name, country, state, city):
     # Create a certificate signing request (CSR)
     csr_subject = x509.Name([
         x509.NameAttribute(NameOID.COUNTRY_NAME, country),
-        # ya zinou hamlik les attribus li zeethum--------------------------------------------------------------------------------------------------------------------
         x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, state),
         x509.NameAttribute(NameOID.LOCALITY_NAME, city),
         x509.NameAttribute(NameOID.ORGANIZATION_NAME, organization),
@@ -106,7 +110,7 @@ def generate_certificate(organization, common_name, country, state, city):
     ).add_extension(
         x509.SubjectAlternativeName([x509.DNSName(common_name)]),
         critical=False,
-    ).sign(private_key, hashes.SHA256())
+    ).sign(ca_private_key, hashes.SHA256())
 
     # Save the entity's private key and certificate to files
     with open("entity.key", "wb") as f:
