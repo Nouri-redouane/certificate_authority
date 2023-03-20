@@ -28,10 +28,14 @@ def validate_certificate_page():
 # params:
 #   Certificate: file.crt
 #   Private Key: file.key
+
+
 @app.route('/validate-certificate', methods=['POST'])
 def validate_certificate():
     # save certificate and private key in uploads folder
-    
+    # print the name of the file received
+    f = request.files[0]
+    print(f.filename)
     # validate certificate
     # validate private key
     # return result
