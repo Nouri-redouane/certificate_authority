@@ -25,16 +25,18 @@ def validate_certificate_page():
     return render_template('validate_certificate.html')
 
 
-
 # /validate-certificate : POST
 # params:
 #   Certificate: file.crt
 @app.route('/validate-certificate', methods=['POST'])
 def validate_certificate():
     # save certificate in uploads folder
+    cert = request.files['certificate']
+    cert.save('uploads/certificate.crt')
+    print('VALIDATING CERTIFICATE...')
     # validate certificate
     # return result
-    return 
+    return render_template('validate_certificate.html')
 
 
 # /download : GET
