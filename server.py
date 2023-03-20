@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, s
 from utils import validateValues
 from gen_cer import generate_certificate
 from verify import verify_certificate
+import os
 
 app = Flask(__name__)
 
@@ -37,16 +38,17 @@ def validate_certificate():
     print('VALIDATING CERTIFICATE...')
     # validate certificate
     # result = validate_certificate()
-    
+
     # return result
-    if(verify_certificate("certificate.crt")):
+    if (verify_certificate("certificate.crt")):
         return render_template('valid.html')
     else:
         return render_template('invalid.html')
 
 
-
 # /download : GET
+
+
 @app.route('/download')
 def download():
     return render_template('download.html')
@@ -56,17 +58,23 @@ def download():
 @app.route('/download/certificate')
 def download_cert():
     print('DOWNLOADING CERTIFICATE...')
+# /home/zineddine/Desktop/Programming/Python-Projects/crypto_flask_server/certificates/entity.crt
     file = send_file(
-        'generated/entity.crt', as_attachment=True)
+        path, as_attachment=True)
     return file
 
 
+path = os.path.join(os.getcwd(), 'generated', 'entity.crt')
+print(path)
 # /download/private-key : GET
+
+
 @app.route('/download/private-key')
 def download_private_key():
     print('DOWNLOADING PRIVATE KEY...')
+    path = os.path.join(os.getcwd(), 'generated', 'entity.key')
     file = send_file(
-        'generated/entity.key', as_attachment=True)
+        path, as_attachment=True)
     return file
 
 # /
