@@ -1,17 +1,3 @@
-"""les étapes li lazem njouzo 3lihoum pour créer une CA et gèrer les certif numérique:
-1) gènèrer une clé privé et une clé publique pour la CA
-2) créer un certif auto signé avec la clé privé pour la CA  (ki hwst pourquoi :
-9alk its the first step in establishing a trust infrastructure for issuing digital certeficates .
-3) créer une CSR (certificate Signing Request ) pour les entités qui demandent un certif
-elle va contenir les informations sur le client (nom de l'entité , pays , address.. )
-4) signer les CSR avec la clé privé du CA pour générer le certif numérique
-"""
-############################################################### code #####
-
-# généralement cryptography lazem tala3ha (pip install cryptography)
-
-
-# c'est la nomre utilisé pour créer les certif (chouf fl cours te3 belkhir )
 from cryptography import x509
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import rsa
@@ -21,16 +7,9 @@ import datetime
 
 
 def generate_certificate(organization, common_name, country, state, city):
-    # Generate a public/private key pair for the CA
-    # ca_private_key = rsa.generate_private_key(
-    #     public_exponent=65537,
-    #     key_size=2048
-    # )
-
+    # Generate a private key for the CA
     key_data = open("keys/ca.key", "rb").read()
     ca_private_key = load_pem_private_key(key_data, password=None)
-
-    #public_key = ca_private_key.public_key()
 
     # Create a self-signed certificate for the CA using the private key
     subject = issuer = x509.Name([
@@ -38,35 +17,6 @@ def generate_certificate(organization, common_name, country, state, city):
                            u'USTHB certificate authority'),
 
     ])
-    # issuer_cert = x509.CertificateBuilder().subject_name(
-    #     subject
-    # ).issuer_name(
-    #     issuer
-    # ).public_key(
-    #     public_key
-    # ).serial_number(
-    #     x509.random_serial_number()
-    # ).not_valid_before(
-    #     datetime.datetime.utcnow()
-    # ).not_valid_after(
-    #     # Set the expiration time of the CA's certificate here
-    #     datetime.datetime.utcnow() + datetime.timedelta(days=365)
-    # ).add_extension(
-    #     x509.BasicConstraints(ca=True, path_length=None), critical=True
-    # ).sign(ca_private_key, hashes.SHA256())
-    # This creates a self-signed digital certificate for the CA using the private key generated in step 2. The certificate contains information about the CA, such as its name, public key, and expiration date. It also includes an extension that identifies the certificate as a CA certificate and sets its path length constraint to None.
-
-    # Save the CA's private key and certificate to files
-    # with open("ca.key", "wb") as f:
-    #     f.write(ca_private_key.private_bytes(
-    #         encoding=serialization.Encoding.PEM,
-    #         format=serialization.PrivateFormat.TraditionalOpenSSL,
-    #         encryption_algorithm=serialization.NoEncryption()
-    #     ))
-    # with open("ca.crt", "wb") as f:
-    #     f.write(issuer_cert.public_bytes(
-    #         encoding=serialization.Encoding.PEM,
-    #     ))
 
     # Generate a public/private key pair for the entity that needs a digital certificate
     entity_private_key = rsa.generate_private_key(
