@@ -89,8 +89,8 @@ def gen_cert():
         print("--------Invalid values--------")
         return render_template('error.html')
 
-    # generate certificate
     generate_certificate(organization, common_name, country, state, city)
-
+    # generate certificate
     # download certificate
+
     return render_template('download.html')
