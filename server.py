@@ -33,6 +33,9 @@ def validate_certificate():
     # save certificate in uploads folder
     cert = request.files['certificate']
     cert.save('uploads/certificate.crt')
+    print('VALIDATING CERTIFICATE...')
+    # validate certificate
+    # result = validate_certificate()
 
     # return result
     if (verify_certificate("certificate.crt")):
@@ -50,11 +53,13 @@ def download():
 # /download/certificate : GET
 @app.route('/download/certificate')
 def download_cert():
-    path = os.path.join(os.getcwd(), 'generated', 'certificate.crt')
+    print('DOWNLOADING CERTIFICATE...')
     file = send_file(
         path, as_attachment=True)
     return file
 
+
+path = os.path.join(os.getcwd(), 'generated', 'entity.crt')
 
 
 # /download/private-key : GET
