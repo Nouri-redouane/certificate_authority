@@ -6,16 +6,14 @@ import os
 
 app = Flask(__name__)
 
+
 # / : GET
-
-
 @app.route('/')
 def index():
     return render_template('index.html')
 
+
 # /generate-certificate : GET
-
-
 @app.route('/generate-certificate')
 def generate_certificate_page():
     return render_template('generate_certificate.html')
@@ -47,8 +45,6 @@ def validate_certificate():
 
 
 # /download : GET
-
-
 @app.route('/download')
 def download():
     return render_template('download.html')
@@ -58,17 +54,15 @@ def download():
 @app.route('/download/certificate')
 def download_cert():
     print('DOWNLOADING CERTIFICATE...')
-# /home/zineddine/Desktop/Programming/Python-Projects/crypto_flask_server/certificates/entity.crt
     file = send_file(
         path, as_attachment=True)
     return file
 
 
 path = os.path.join(os.getcwd(), 'generated', 'entity.crt')
-print(path)
+
+
 # /download/private-key : GET
-
-
 @app.route('/download/private-key')
 def download_private_key():
     print('DOWNLOADING PRIVATE KEY...')
@@ -76,8 +70,6 @@ def download_private_key():
     file = send_file(
         path, as_attachment=True)
     return file
-
-# /
 
 
 # /generate-certificate : POST
@@ -87,7 +79,6 @@ def download_private_key():
 #   Country: string (two letter code)
 #   State: string
 #   City: string
-
 @app.route('/generate-certificate', methods=['POST'])
 def gen_cert():
     common_name = str(request.form['cn'])
