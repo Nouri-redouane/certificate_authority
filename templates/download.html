@@ -27,7 +27,11 @@
       >
         <!-- on clicking on downlod certificate button we ;ake GET request to /download/certificate -->
         <!-- on clicking on downlod private key button we ;ake GET request to /download/private-key -->
-        <form action="http://localhost:5000/download/certificate" method="get" class="h-12 w-60 m-auto">
+        <form
+          action="http://localhost:5000/download/certificate"
+          method="get"
+          class="h-12 w-60 m-auto"
+        >
           <button
             id="certificate"
             class="h-12 w-60 flex items-center justify-evenly m-auto rounded-lg text-center bg-blue-200 font-medium"
@@ -51,36 +55,5 @@
         </form>
       </div>
     </div>
-
-    <script>
-      // add event listeners to buttons
-      // to download the files
-
-      // get the buttons
-      const downloadCertificate = document.getElementById("certificate");
-      const downloadPrivateKey = document.getElementById("privateKey");
-
-      //function downloadFile(name, path) {
-      //  // Create a new anchor element
-      //  var downloadLink = document.createElement("a");
-      //
-      //  // Set the file name and href attribute for the download link
-      //  downloadLink.setAttribute("download", name);
-      //  downloadLink.setAttribute("href", path);
-      //
-      //  // Append the download link to the document body
-      //  document.body.appendChild(downloadLink);
-      //
-      //  // Simulate a click on the download link
-      //  downloadLink.click();
-      //
-      //  // Remove the download link from the document body
-      //  document.body.removeChild(downloadLink);
-      //}
-
-      downloadPrivateKey.addEventListener("click", () => {
-        downloadFile("PrivKey.key", "keys/entity.key");
-      });
-    </script>
   </body>
 </html>
