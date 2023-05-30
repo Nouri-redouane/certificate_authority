@@ -1,125 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Certificate Generation Software</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
 
-  <body>
-    <!-- create a page with title: certificate generation and a form that contains :
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificate Generation Software</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+  <!-- create a page with title: certificate generation and a form that contains :
         CN, Organization, City, State and Country -->
 
-    <div class="bg-gray-100 rounded-lg h-screen p-12 pt-4">
-         <!-- Navbar -->
-      <div class="flex justify-between items-center mb-10">
-        <!-- Logo & Title -->
-        <div class="flex items-center">
-          <img
-            src="{{url_for('static', filename='logo.png')}}"
-            alt=""
-            class="w-16 h-16 mr-4"
-          />
-          <h1 class="text-3xl font-bold">My CA</h1>
-        </div>
-
-        <!-- Links -->
-        <div class="flex items-center">
-          <a
-            href="http://localhost:5000/"
-            class="mr-5 transition-all duration-200 hover:border-b hover:border-gray-400"
-            >Home</a
-          >
-          <a
-            href="http://localhost:5000/generate-certificate"
-            class="mr-5 transition-all duration-200 hover:border-b hover:border-gray-400"
-            >Generate Certificate</a
-          >
-          <a
-            href="http://localhost:5000/validate-certificate"
-            class="transition-all duration-200 hover:border-b hover:border-gray-400"
-            >Validate Certificate</a
-          >
-        </div>
+  <div class="bg-gray-100 rounded-lg h-screen p-12 pt-4">
+    <!-- Navbar -->
+    <div class="flex justify-between items-center mb-10">
+      <!-- Logo & Title -->
+      <div class="flex items-center">
+        <img src="{{url_for('static', filename='logo.png')}}" alt="" class="w-16 h-16 mr-4" />
+        <h1 class="text-3xl font-bold">My CA</h1>
       </div>
 
-      <!-- Title -->
-      <div class="flex justify-center">
-        <h1 class="text-3xl font-bold mb-10">Certificate Validation</h1>
+      <!-- Links -->
+      <div class="flex items-center">
+        <a href="http://localhost:5000/"
+          class="mr-5 transition-all duration-200 hover:border-b hover:border-gray-400">Home</a>
+        <a href="http://localhost:5000/generate-certificate"
+          class="mr-5 transition-all duration-200 hover:border-b hover:border-gray-400">Generate Certificate</a>
+        <a href="http://localhost:5000/validate-certificate"
+          class="transition-all duration-200 hover:border-b hover:border-gray-400">Validate Certificate</a>
       </div>
+    </div>
 
-      <!-- Form -->
-      <form
-        class="relative w-10/12 flex flex-col justify-evenly items-center mx-auto px-12 pt-10 pb-7 bg-gray-200 border-4 border-gray-300 border-dashed rounded-lg"
-        id="validate-form"
-        action="http://localhost:5000/validate-certificate"
-        method="post"
-        enctype="multipart/form-data"
-      >
-        <p class="text-sm text-center text-gray-500 mb-4">Drag or drop your certificate here.</p>
-        <img
-        src="{{url_for('static', filename='drag file.png')}}"
-        alt=""
-        class="w-40 h-40 mt-8"
-      />
-      <p class="mt-2"
-      id="file-name"
-      ></p>
+    <!-- Title -->
+    <div class="flex justify-center">
+      <h1 class="text-3xl font-bold mb-10">Certificate Validation</h1>
+    </div>
+
+
+
+    <!-- Form -->
+    <form
+      class="relative w-10/12 flex flex-col justify-evenly items-center mx-auto px-12 pt-10 pb-7 bg-gray-200 border-4 border-gray-300 border-dashed rounded-lg"
+      id="validate-form" action="http://localhost:5000/validate-certificate" method="post"
+      enctype="multipart/form-data">
+      <p class="text-sm text-center text-gray-500 mb-4">Drag or drop your certificate here.</p>
+      <img src="{{url_for('static', filename='drag file.png')}}" alt="" class="w-40 h-40 mt-8" />
+      <p class="mt-2" id="file-name"></p>
       <div class="w-1/2 mx-auto flex items-center mx-auto mt-20">
-        <button
-          type="reset"
-            id="cancel-btn"
-          class="h-12 w-48 m-auto rounded-lg text-center bg-red-300 shadow font-medium z-10"
-        >
+        <button type="reset" id="cancel-btn"
+          class="h-12 w-48 m-auto rounded-lg text-center bg-red-300 shadow font-medium z-10">
           Cancel
         </button>
-        <button
-          type="submit"
-          id="submit-btn"
-          class="h-12 w-48 m-auto rounded-lg text-center bg-white shadow font-medium z-10"
-        >
+        <button type="submit" id="submit-btn"
+          class="h-12 w-48 m-auto rounded-lg text-center bg-white shadow font-medium z-10">
           Validate
         </button>
 
         <!-- file -->
-        <input
-          type="file"
-          name="certificate"
-          id="certificate"
-          class="opacity-0 absolute inset-0"
-          accept=".crt"
-          required
-        />
-      </form>
-    </div>
-  </body>
-  <script>
-    const fileInput = document.getElementById("certificate");
-    const fileName = document.getElementById("file-name");
-    const submitBtn = document.getElementById("submit-btn");
-    const cancelBtn = document.getElementById("cancel-btn");
+        <input type="file" name="certificate" id="certificate" class="opacity-0 absolute inset-0" accept=".crt"
+          required />
+    </form>
+  </div>
+</body>
+<script>
+  const fileInput = document.getElementById("certificate");
+  const fileName = document.getElementById("file-name");
+  const submitBtn = document.getElementById("submit-btn");
+  const cancelBtn = document.getElementById("cancel-btn");
 
-    fileInput.addEventListener("change", function () {
-      if (fileInput.value) {
-        submitBtn.classList.remove("bg-white");
-        submitBtn.classList.add("bg-green-300");
-        fileName.textContent = fileInput.value.match(
-          /[\/\\]([\w\d\s\.\-\(\)]+)$/
-        )[1];
-      } else {
-        submitBtn.classList.remove("bg-green-300");
-        submitBtn.classList.add("bg-white");
-        fileName.textContent = "";
-      }
-    });
-
-    cancelBtn.addEventListener("click", function () {
-      fileInput.value = "";
+  fileInput.addEventListener("change", function () {
+    if (fileInput.value) {
+      submitBtn.classList.remove("bg-white");
+      submitBtn.classList.add("bg-green-300");
+      fileName.textContent = fileInput.value.match(
+        /[\/\\]([\w\d\s\.\-\(\)]+)$/
+      )[1];
+    } else {
       submitBtn.classList.remove("bg-green-300");
       submitBtn.classList.add("bg-white");
       fileName.textContent = "";
-    });
-  </script>
+    }
+  });
+
+  cancelBtn.addEventListener("click", function () {
+    fileInput.value = "";
+    submitBtn.classList.remove("bg-green-300");
+    submitBtn.classList.add("bg-white");
+    fileName.textContent = "";
+  });
+</script>
+
 </html>

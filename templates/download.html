@@ -16,6 +16,38 @@
     <!-- create a page with title: download you certicate and keys -->
     <!-- and provide user with # buttons to download them -->
     <div class="h-screen w-screen bg-gray-100 rounded-lg p-12 pt-8">
+         <!-- Navbar -->
+         <div class="flex justify-between items-center mb-10">
+          <!-- Logo & Title -->
+          <div class="flex items-center">
+            <img
+              src="{{url_for('static', filename='logo.png')}}"
+              alt=""
+              class="w-16 h-16 mr-4"
+            />
+            <h1 class="text-3xl font-bold">My CA</h1>
+          </div>
+  
+          <!-- Links -->
+          <div class="flex items-center">
+            <a
+              href="http://localhost:5000/"
+              class="mr-5 transition-all duration-200 hover:border-b hover:border-gray-400"
+              >Home</a
+            >
+            <a
+              href="http://localhost:5000/generate-certificate"
+              class="mr-5 transition-all duration-200 hover:border-b hover:border-gray-400"
+              >Generate Certificate</a
+            >
+            <a
+              href="http://localhost:5000/validate-certificate"
+              class="transition-all duration-200 hover:border-b hover:border-gray-400"
+              >Validate Certificate</a
+            >
+          </div>
+        </div>
+        
       <!-- Title -->
       <div class="flex justify-center">
         <h1 class="text-3xl font-bold mb-10">Get your certificate</h1>
